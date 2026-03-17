@@ -2,133 +2,796 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gemini Clone - Working UI</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>NEO-QUANTUM · 2050 AI ASSISTANT</title>
     <style>
-        body { background-color: #131314; color: #e3e3e3; font-family: 'Google Sans', sans-serif; overflow: hidden; }
-        .sidebar { transition: width 0.3s; width: 68px; background-color: #1e1f20; }
-        .sidebar.expanded { width: 280px; }
-        .input-container { background-color: #1e1f20; border-radius: 28px; transition: 0.2s; }
-        .input-container:focus-within { background-color: #28292a; }
-        textarea { resize: none; max-height: 200px; }
-        /* Scrollbar styling */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+        }
+
+        /* 2050 holographic dark theme */
+        :root {
+            --bg-deep: #050505;
+            --glass-edge: rgba(0, 255, 255, 0.25);
+            --glass-panel: rgba(20, 30, 45, 0.5);
+            --primary-glow: #00f0ff;
+            --secondary-glow: #b794f4;
+            --text-primary: rgba(255, 255, 255, 0.95);
+            --text-soft: rgba(200, 230, 255, 0.8);
+            --accent-line: #2affb6;
+            --bubble-user: linear-gradient(145deg, #0066cc, #0099ff);
+            --bubble-ai: rgba(30, 40, 60, 0.7);
+            --success-neon: #00ffaa;
+            --warning-neon: #ffbb33;
+        }
+
+        body {
+            background: var(--bg-deep);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* LIVING NEURAL GRID BACKGROUND (GPU accelerated) */
+        .neural-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            opacity: 0.3;
+            background-image: 
+                linear-gradient(rgba(0, 255, 255, 0.08) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 255, 0.08) 1px, transparent 1px);
+            background-size: 60px 60px;
+            animation: gridVibrate 8s infinite alternate ease-in-out;
+            transform-origin: center;
+            will-change: transform, opacity;
+            pointer-events: none;
+        }
+
+        .neural-grid::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 30% 40%, rgba(100, 0, 255, 0.15), transparent 50%),
+                        radial-gradient(circle at 70% 60%, rgba(0, 255, 200, 0.12), transparent 55%);
+            animation: pulseGlow 12s infinite alternate;
+        }
+
+        @keyframes gridVibrate {
+            0% { transform: scale(1) rotate(0deg); opacity: 0.25; }
+            50% { transform: scale(1.02) rotate(0.2deg); opacity: 0.35; }
+            100% { transform: scale(0.98) rotate(-0.2deg); opacity: 0.25; }
+        }
+
+        @keyframes pulseGlow {
+            0% { opacity: 0.2; }
+            100% { opacity: 0.5; }
+        }
+
+        /* MAIN CONTAINER – centered, max-width 850px (classic chat efficiency) */
+        .neo-container {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            max-width: 850px;
+            height: 95vh;
+            background: rgba(8, 12, 20, 0.5);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-edge);
+            border-radius: 42px;
+            box-shadow: 0 0 60px rgba(0, 255, 255, 0.2), inset 0 0 30px rgba(0, 255, 255, 0.05);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            transition: box-shadow 0.3s ease;
+        }
+
+        /* haptic neon flash */
+        .neo-container.thinking-flash {
+            box-shadow: 0 0 100px #00f0ff, 0 0 200px #b794f4;
+            transition: 0.15s;
+        }
+
+        /* HEADER – glass panel */
+        .neo-header {
+            padding: 1.2rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(0, 255, 255, 0.2);
+            background: rgba(0, 0, 0, 0.25);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .quantum-icon {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, #00f0ff, #b794f4, #ff5e9e);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            box-shadow: 0 0 25px #00f0ff;
+        }
+
+        .brand-text {
+            font-size: clamp(1.4rem, 5vw, 2rem);
+            font-weight: 700;
+            background: linear-gradient(135deg, #fff, #b2f0ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.02em;
+        }
+
+        .user-badge {
+            background: rgba(0, 255, 255, 0.1);
+            padding: 0.6rem 1.2rem;
+            border-radius: 40px;
+            border: 1px solid var(--primary-glow);
+            color: white;
+            font-weight: 500;
+            font-size: 0.95rem;
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .user-badge::before {
+            content: '';
+            width: 10px;
+            height: 10px;
+            background: #00ffaa;
+            border-radius: 50%;
+            box-shadow: 0 0 15px #00ffaa;
+        }
+
+        /* CHAT AREA */
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 2rem 1.5rem;
+            scroll-behavior: smooth;
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+
+        /* message bubbles with 3D float effect */
+        .message {
+            display: flex;
+            gap: 12px;
+            max-width: 85%;
+            animation: floatIn 0.35s cubic-bezier(0.2, 0.9, 0.3, 1.1);
+            will-change: transform;
+        }
+
+        .message.user {
+            align-self: flex-end;
+            flex-direction: row-reverse;
+        }
+
+        .avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 14px;
+            background: linear-gradient(145deg, #2a2f4f, #1a1f3a);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: white;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+            border: 1px solid rgba(255,255,255,0.1);
+            flex-shrink: 0;
+        }
+
+        .user .avatar {
+            background: linear-gradient(145deg, #0066cc, #0099ff);
+            border-color: #00f0ff;
+        }
+
+        .bubble {
+            padding: 1.2rem 1.5rem;
+            border-radius: 28px;
+            background: var(--bubble-ai);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            box-shadow: 0 15px 30px -10px rgba(0,0,0,0.5), 0 0 0 1px rgba(0,255,255,0.1) inset;
+            transition: transform 0.2s ease, border-color 0.2s;
+            transform-style: preserve-3d;
+        }
+
+        .message:hover .bubble {
+            border-color: var(--primary-glow);
+            transform: translateY(-3px) scale(1.01);
+            box-shadow: 0 20px 35px -8px #00f0ff40;
+        }
+
+        .user .bubble {
+            background: var(--bubble-user);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: white;
+        }
+
+        .bubble p {
+            margin: 0.5rem 0;
+            line-height: 1.6;
+            font-size: clamp(0.95rem, 2vw, 1.05rem);
+            color: var(--text-primary);
+        }
+
+        /* markdown style inside bubbles */
+        .bubble h1 { font-size: 1.6rem; margin: 0.5rem 0; color: var(--primary-glow); }
+        .bubble h2 { font-size: 1.3rem; color: #b2f0ff; }
+        .bubble strong { color: var(--success-neon); }
+        .bubble ul { margin-left: 1.2rem; }
+
+        /* copy button for code blocks */
+        .code-block {
+            background: #0f172a;
+            border-radius: 16px;
+            padding: 1rem;
+            margin: 0.8rem 0;
+            border: 1px solid #00f0ff30;
+            position: relative;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: rgba(0,255,255,0.2);
+            border: none;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            backdrop-filter: blur(5px);
+            border: 1px solid #00f0ff;
+            transition: 0.15s;
+        }
+        .copy-btn:hover {
+            background: #00f0ff;
+            color: black;
+            box-shadow: 0 0 20px #00f0ff;
+        }
+
+        /* INPUT AREA – chatgpt style expanding + waveform */
+        .input-panel {
+            background: rgba(0, 0, 0, 0.45);
+            backdrop-filter: blur(25px);
+            border-top: 1px solid rgba(0, 255, 255, 0.25);
+            padding: 1.2rem 2rem 1.5rem;
+        }
+
+        .input-wrapper {
+            display: flex;
+            align-items: flex-end;
+            gap: 12px;
+            background: rgba(20, 30, 50, 0.5);
+            border: 1.5px solid rgba(0, 255, 255, 0.3);
+            border-radius: 42px;
+            padding: 0.6rem 0.6rem 0.6rem 1.8rem;
+            transition: border 0.15s, box-shadow 0.15s;
+            position: relative;
+        }
+
+        .input-wrapper:focus-within {
+            border-color: #00f0ff;
+            box-shadow: 0 0 35px #00f0ff;
+        }
+
+        textarea {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 1rem;
+            line-height: 1.5;
+            max-height: 150px;
+            resize: none;
+            padding: 0.8rem 0;
+            font-family: inherit;
+            outline: none;
+        }
+
+        textarea::placeholder {
+            color: rgba(200, 220, 255, 0.5);
+            font-weight: 300;
+            letter-spacing: 0.3px;
+        }
+
+        .input-actions {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .action-btn {
+            width: 48px;
+            height: 48px;
+            border-radius: 40px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(0, 255, 255, 0.4);
+            color: #b2f0ff;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: 0.12s;
+            backdrop-filter: blur(10px);
+        }
+
+        .action-btn:hover {
+            background: #00f0ff;
+            color: #050505;
+            border-color: white;
+            box-shadow: 0 0 35px #00f0ff;
+            transform: scale(1.08);
+        }
+
+        .action-btn:active {
+            transform: scale(0.95);
+            box-shadow: 0 0 60px #ff5e9e;
+        }
+
+        .send-btn {
+            background: linear-gradient(145deg, #00f0ff, #b794f4);
+            color: black;
+            font-weight: bold;
+            border: none;
+            width: 54px;
+            height: 54px;
+        }
+
+        /* Voice waveform (dynamic during mic) */
+        .voice-wave {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            height: 30px;
+            padding: 0 10px;
+        }
+
+        .wave-bar {
+            width: 5px;
+            height: 20px;
+            background: #00f0ff;
+            border-radius: 8px;
+            animation: wave 0.8s infinite ease;
+        }
+
+        .wave-bar:nth-child(2) { animation-delay: 0.1s; height: 28px; background: #b794f4; }
+        .wave-bar:nth-child(3) { animation-delay: 0.2s; height: 24px; }
+        .wave-bar:nth-child(4) { animation-delay: 0.3s; height: 32px; background: #ff5e9e; }
+        .wave-bar:nth-child(5) { animation-delay: 0.4s; height: 18px; }
+
+        @keyframes wave {
+            0%, 100% { transform: scaleY(0.8); opacity: 0.6; }
+            50% { transform: scaleY(1.5); opacity: 1; }
+        }
+
+        /* image preview inside chat */
+        .image-preview {
+            max-width: 240px;
+            border-radius: 24px;
+            border: 2px solid #00f0ff;
+            margin: 10px 0;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .image-preview:hover {
+            transform: scale(1.02);
+            filter: brightness(1.2);
+        }
+
+        .ocr-text, .analysis-tag {
+            background: #0f2335;
+            border-radius: 14px;
+            padding: 0.6rem 1rem;
+            margin: 0.5rem 0;
+            border-left: 4px solid #00f0ff;
+            font-size: 0.9rem;
+            color: #b2f0ff;
+        }
+
+        /* file attachment chip */
+        .file-chip {
+            background: #142c3c;
+            border-radius: 40px;
+            padding: 0.5rem 1.2rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid #00f0ff;
+            margin: 0.2rem 0;
+        }
+
+        /* chart placeholder */
+        .chart-box {
+            background: #071a28;
+            border-radius: 24px;
+            padding: 1rem;
+            margin: 0.8rem 0;
+            border: 1px solid cyan;
+            height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #00f0ff;
+            font-size: 0.9rem;
+            background: linear-gradient(45deg, #0b2540, #001a2f);
+        }
+
+        /* drag-drop highlight */
+        .input-wrapper.drag-over {
+            border-color: #ff5e9e;
+            background: rgba(255, 0, 100, 0.1);
+        }
+
+        /* mobile */
+        @media (max-width: 600px) {
+            .neo-container { height: 98vh; border-radius: 28px; }
+            .message { max-width: 95%; }
+            .input-panel { padding: 1rem; }
+        }
+
+        /* indexedDB persistence message */
+        .restore-toast {
+            background: #0f2a3a;
+            border-left: 5px solid #00f0ff;
+            padding: 12px 20px;
+            border-radius: 40px;
+            color: white;
+            margin-bottom: 12px;
+            font-size: 0.9rem;
+        }
     </style>
 </head>
-<body class="flex h-screen">
+<body>
+    <div class="neural-grid"></div>
 
-    <aside id="sidebar" class="sidebar flex flex-col justify-between py-4 px-3 h-full hidden md:flex">
-        <div>
-            <button onclick="toggleSidebar()" class="p-3 hover:bg-gray-700 rounded-full mb-8">
-                <i class="fa-solid fa-bars text-xl"></i>
-            </button>
-            <button class="flex items-center p-3 hover:bg-gray-700 rounded-full text-gray-400 gap-4">
-                <i class="fa-solid fa-plus text-xl"></i>
-                <span class="hidden sidebar-text font-medium">New Chat</span>
-            </button>
-        </div>
-        <div class="flex flex-col gap-2">
-            <div class="flex items-center p-3 hover:bg-gray-700 rounded-full gap-4">
-                <i class="fa-solid fa-circle-question text-xl"></i>
-                <span class="hidden sidebar-text">Help</span>
+    <div class="neo-container" id="neoContainer">
+        <div class="neo-header">
+            <div class="brand">
+                <span class="quantum-icon">⚡</span>
+                <span class="brand-text">NEO·QUANTUM</span>
             </div>
-            <div class="flex items-center p-3 hover:bg-gray-700 rounded-full gap-4">
-                <i class="fa-solid fa-clock-rotate-left text-xl"></i>
-                <span class="hidden sidebar-text">Activity</span>
-            </div>
-            <div class="flex items-center p-3 hover:bg-gray-700 rounded-full gap-4">
-                <i class="fa-solid fa-gear text-xl"></i>
-                <span class="hidden sidebar-text">Settings</span>
-            </div>
-        </div>
-    </aside>
-
-    <div class="flex-grow flex flex-col relative overflow-hidden">
-        
-        <header class="flex justify-between items-center p-4">
-            <div class="flex items-center gap-2">
-                <span class="text-xl font-semibold">Gemini <i class="fa-solid fa-caret-down text-sm text-gray-400"></i></span>
-            </div>
-            <div class="flex items-center gap-4">
-                <button class="bg-[#28292a] px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-700">Try Gemini Advanced</button>
-                <img src="https://via.placeholder.com/32" class="w-8 h-8 rounded-full border border-gray-600" alt="Profile">
-            </div>
-        </header>
-
-        <div id="chat-window" class="flex-grow overflow-y-auto px-4 md:px-20 py-10 flex flex-col gap-8">
-            <div id="greeting" class="mt-10">
-                <h2 class="text-4xl font-medium text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-red-400 to-orange-400">Hi Gurshak</h2>
-                <h1 class="text-5xl font-semibold text-gray-500 mt-2">Where should we start?</h1>
-            </div>
+            <div class="user-badge">GURSHAK · 2050</div>
         </div>
 
-        <div class="p-4 md:px-20 pb-8">
-            <div class="input-container p-3 flex flex-col">
-                <textarea id="userInput" rows="1" placeholder="Enter a prompt here" 
-                    class="bg-transparent border-none outline-none w-full px-2 text-lg"
-                    oninput="autoGrow(this)"></textarea>
+        <!-- CHAT MESSAGES -->
+        <div class="chat-messages" id="chatMessages">
+            <!-- welcome message from AI (will be restored by DB later) -->
+        </div>
+
+        <!-- INPUT PANEL with drag & drop, camera, mic, translation -->
+        <div class="input-panel">
+            <div class="input-wrapper" id="inputWrapper">
+                <textarea id="messageInput" placeholder="Message Gurshak (GPT‑4o + Gemini 1.5 Pro) · 95+ langs" rows="1"></textarea>
                 
-                <div class="flex justify-between items-center mt-3 px-2">
-                    <div class="flex gap-4 text-gray-400 items-center">
-                        <label class="cursor-pointer hover:text-white"><i class="fa-solid fa-plus-circle text-xl"></i><input type="file" hidden></label>
-                        <i class="fa-regular fa-image text-xl cursor-pointer hover:text-white"></i>
-                    </div>
-                    <div class="flex items-center gap-4">
-                        <div class="bg-[#333537] px-2 py-0.5 rounded-md text-[10px] font-bold text-gray-300">Fast</div>
-                        <i class="fa-solid fa-microphone text-xl text-gray-400 cursor-pointer hover:text-white"></i>
-                        <button id="sendBtn" onclick="sendMessage()" class="hidden"><i class="fa-solid fa-paper-plane text-xl text-blue-400"></i></button>
-                    </div>
+                <!-- voice waveform (hidden by default) -->
+                <div class="voice-wave" id="voiceWave" style="display: none;">
+                    <div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div>
+                </div>
+
+                <div class="input-actions">
+                    <button class="action-btn" id="attachBtn" title="Attach file (PDF, Excel, CSV, Image)">📎</button>
+                    <button class="action-btn" id="cameraBtn" title="Camera">📷</button>
+                    <button class="action-btn" id="micBtn" title="Voice input">🎤</button>
+                    <button class="action-btn" id="translateBtn" title="Global translation">🌐</button>
+                    <button class="action-btn send-btn" id="sendBtn">➤</button>
                 </div>
             </div>
-            <p class="text-center text-[11px] text-gray-500 mt-3">Gemini may display inaccurate info, including about people, so double-check its responses.</p>
+            <div style="text-align: right; margin-top: 6px; color: #6ba0ff; font-size: 0.75rem; opacity: 0.6;">⚡ hybrid reasoning: gpt-4o · gemini 1.5 pro</div>
         </div>
     </div>
 
     <script>
-        function toggleSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            const texts = document.querySelectorAll('.sidebar-text');
-            sidebar.classList.toggle('expanded');
-            texts.forEach(t => t.classList.toggle('hidden'));
-        }
-
-        function autoGrow(element) {
-            element.style.height = "5px";
-            element.style.height = (element.scrollHeight) + "px";
-            
+        (function() {
+            // ==================== 2050 CORE ====================
+            const USER_NAME = 'Gurshak';
+            const CHAT_KEY = 'neoQuantumChat';
+            const chatMessages = document.getElementById('chatMessages');
+            const messageInput = document.getElementById('messageInput');
             const sendBtn = document.getElementById('sendBtn');
-            if(element.value.trim().length > 0) {
-                sendBtn.classList.remove('hidden');
-            } else {
-                sendBtn.classList.add('hidden');
+            const attachBtn = document.getElementById('attachBtn');
+            const cameraBtn = document.getElementById('cameraBtn');
+            const micBtn = document.getElementById('micBtn');
+            const translateBtn = document.getElementById('translateBtn');
+            const voiceWave = document.getElementById('voiceWave');
+            const container = document.getElementById('neoContainer');
+
+            // haptic flash
+            function hapticFlash() {
+                container.classList.add('thinking-flash');
+                setTimeout(() => container.classList.remove('thinking-flash'), 250);
             }
-        }
 
-        function sendMessage() {
-            const input = document.getElementById('userInput');
-            const chatWindow = document.getElementById('chat-window');
-            const greeting = document.getElementById('greeting');
+            // ========== INDEXED DB / LOCALSTORAGE persistence ==========
+            function saveMessages() {
+                const messages = [];
+                document.querySelectorAll('.message').forEach(msg => {
+                    const isUser = msg.classList.contains('user');
+                    const bubble = msg.querySelector('.bubble');
+                    if (!bubble) return;
+                    const html = bubble.innerHTML; // store full markdown
+                    const time = bubble.querySelector('.msg-time')?.innerText || new Date().toLocaleTimeString();
+                    messages.push({ isUser, html, time });
+                });
+                localStorage.setItem(CHAT_KEY, JSON.stringify(messages));
+            }
 
-            if(input.value.trim() === "") return;
+            function restoreMessages() {
+                const saved = localStorage.getItem(CHAT_KEY);
+                if (saved) {
+                    try {
+                        const msgs = JSON.parse(saved);
+                        msgs.forEach(m => addMessage(m.isUser ? 'user' : 'ai', m.html, true));
+                    } catch (e) {}
+                } else {
+                    // first ever welcome
+                    const welcomeMarkdown = `
+                        <h1>🔮 Good to see you, Gurshak</h1>
+                        <p>I'm <strong>NEO‑QUANTUM</strong>, your 2050 hybrid brain. I blend:</p>
+                        <ul>
+                            <li><span style="color:#00f0ff">GPT‑4o</span> for complex reasoning</li>
+                            <li><span style="color:#b794f4">Gemini 1.5 Pro</span> for vision, files & OCR</li>
+                            <li><span style="color:#2affb6">Google Assistant fluidity</span> with voice</li>
+                        </ul>
+                        <p>Try: upload image (bg remove / OCR), PDF, Excel, or ask anything.</p>
+                        <div class="msg-time" style="opacity:0.6">just now</div>
+                    `;
+                    addMessage('ai', welcomeMarkdown);
+                }
+            }
 
-            // Hide greeting on first message
-            if(greeting) greeting.style.display = 'none';
+            // ADD MESSAGE (with markdown / html)
+            function addMessage(sender, contentHtml, isRestore = false) {
+                const msgDiv = document.createElement('div');
+                msgDiv.className = `message ${sender}`;
 
-            // Append User Message
-            const userMsg = `<div class="flex justify-end"><div class="bg-[#28292a] p-4 rounded-2xl max-w-[80%]">${input.value}</div></div>`;
-            chatWindow.innerHTML += userMsg;
+                const avatarDiv = document.createElement('div');
+                avatarDiv.className = 'avatar';
+                avatarDiv.innerText = sender === 'user' ? 'G' : '⚡';
 
-            // Clear Input
-            input.value = "";
-            input.style.height = "auto";
-            document.getElementById('sendBtn').classList.add('hidden');
+                const bubbleDiv = document.createElement('div');
+                bubbleDiv.className = 'bubble';
+                bubbleDiv.innerHTML = contentHtml;
 
-            // Scroll to bottom
-            chatWindow.scrollTop = chatWindow.scrollHeight;
-        }
+                msgDiv.appendChild(avatarDiv);
+                msgDiv.appendChild(bubbleDiv);
+                chatMessages.appendChild(msgDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+
+                if (!isRestore) saveMessages();
+            }
+
+            // markdown parser (basic)
+            function parseMarkdown(text) {
+                // very minimal: convert **bold**, \n, and code ```
+                let html = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+                html = html.replace(/```(.*?)```/gs, '<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 copy</button><pre><code>$1</code></pre></div>');
+                html = html.replace(/\n/g, '<br>');
+                return html;
+            }
+
+            // copy code function (global)
+            window.copyCode = function(btn) {
+                const pre = btn.nextElementSibling;
+                if (pre) {
+                    navigator.clipboard.writeText(pre.innerText);
+                    btn.innerText = '✅ copied';
+                    setTimeout(() => btn.innerText = '📋 copy', 1500);
+                }
+            };
+
+            // ========== AI RESPONSE (simulate hybrid) ==========
+            function generateAIResponse(userText, attachmentInfo = null) {
+                hapticFlash();
+                let reply = '';
+
+                if (attachmentInfo) {
+                    if (attachmentInfo.type.startsWith('image/')) {
+                        reply = `
+                            <h2>🖼️ Image analysis (Gemini 1.5 Pro)</h2>
+                            <img src="${attachmentInfo.data}" class="image-preview" onclick="window.open(this.src)"/>
+                            <div class="analysis-tag"><strong>🔍 objects detected:</strong> person, laptop, coffee cup, neural interface</div>
+                            <div class="ocr-text"><strong>📝 OCR text:</strong> "NEO-QUANTUM prototype • Gurshak • 2055"</div>
+                            <p><button class="copy-btn" style="position:static; margin-right:8px;" onclick="alert('bg removal demo')">✨ BG REMOVE</button> <button class="copy-btn" style="position:static;" onclick="alert('object analysis')">🔎 OBJECT ANALYSIS</button></p>
+                            <div class="msg-time">from gemini vision</div>
+                        `;
+                    } else if (attachmentInfo.type === 'application/pdf' || attachmentInfo.name?.includes('.pdf')) {
+                        reply = `
+                            <h2>📄 PDF summary (GPT-4o + Gemini)</h2>
+                            <p>Document: <strong>${attachmentInfo.name}</strong> (24 pages)</p>
+                            <ul>
+                                <li>🔹 <strong>Key finding:</strong> Quantum entanglement at room temperature</li>
+                                <li>🔹 <strong>Methodology:</strong> neural network optimization</li>
+                                <li>🔹 <strong>Charts:</strong> page 12 shows efficiency increase</li>
+                            </ul>
+                            <div class="chart-box">📊 [ simulated chart: efficiency +34% ]</div>
+                            <div class="msg-time">analysis complete</div>
+                        `;
+                    } else if (attachmentInfo.type.includes('spreadsheet') || attachmentInfo.name?.includes('.csv') || attachmentInfo.name?.includes('.xlsx')) {
+                        reply = `
+                            <h2>📊 Spreadsheet insight (Gemini pro)</h2>
+                            <p>Rows: 128, columns: 6</p>
+                            <div class="chart-box">📈 [ bar chart: sales vs quarter ]</div>
+                            <p><strong>Summary:</strong> Q3 growth 22%, outlier in row 77 (anomaly detected)</p>
+                            <div class="msg-time">gemini data analysis</div>
+                        `;
+                    }
+                } else {
+                    // text only: use hybrid style with elite markdown
+                    if (userText.toLowerCase().includes('hello') || userText.toLowerCase().includes('hi')) {
+                        reply = `<h2>👋 Hey Gurshak</h2><p>I'm fully online. <strong>GPT-4o</strong> and <strong>Gemini 1.5</strong> ready. How can I assist?</p><div class="msg-time">hybrid response</div>`;
+                    } else if (userText.toLowerCase().includes('code') || userText.toLowerCase().includes('python')) {
+                        reply = `<h2>🐍 Python: fibonacci + memoization</h2><div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 copy</button><pre><code>def fib(n, memo={}):
+    if n in memo: return memo[n]
+    if n <= 1: return n
+    memo[n] = fib(n-1, memo) + fib(n-2, memo)
+    return memo[n]
+
+print(fib(100))  # 354224848179261915075</code></pre></div><div class="msg-time">gpt-4o turbo</div>`;
+                    } else {
+                        reply = `<h2>🔮 Gurshak, here's my quantum perspective</h2><p>Your message: "${userText}"</p><p>I processed it with <strong>GPT-4o (reasoning)</strong> and cross-checked via <strong>Gemini 1.5</strong>. The most likely answer involves neural synthesis.</p><div class="msg-time">2050 neural net</div>`;
+                    }
+                }
+
+                addMessage('ai', reply);
+            }
+
+            // ========== SEND MESSAGE ==========
+            function sendUserMessage() {
+                const txt = messageInput.value.trim();
+                if (txt === '') return;
+                addMessage('user', `<p>${txt}</p><div class="msg-time">just now</div>`);
+                messageInput.value = '';
+                messageInput.style.height = 'auto';
+
+                generateAIResponse(txt);
+            }
+
+            // ========== FILE UPLOAD HANDLER (multimodal) ==========
+            function handleFiles(files) {
+                for (let file of files) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        let content = '';
+                        if (file.type.startsWith('image/')) {
+                            content = `<div class="file-chip">📷 ${file.name}</div><img src="${e.target.result}" class="image-preview" />`;
+                        } else {
+                            content = `<div class="file-chip">📎 ${file.name} (${(file.size/1024).toFixed(1)} KB)</div>`;
+                        }
+                        addMessage('user', content + `<div class="msg-time">uploaded</div>`);
+
+                        // simulate AI analysis (pass attachment)
+                        generateAIResponse('', { type: file.type, data: e.target.result, name: file.name });
+                    };
+                    if (file.type.startsWith('image/') || file.type.includes('pdf') || file.type.includes('spreadsheet')) {
+                        reader.readAsDataURL(file);
+                    } else {
+                        reader.readAsText(file, 'UTF-8'); // for csv etc
+                    }
+                    break; // only first for demo
+                }
+            }
+
+            // ========== EVENT LISTENERS ==========
+            sendBtn.addEventListener('click', sendUserMessage);
+            messageInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    sendUserMessage();
+                }
+            });
+
+            // auto-expand textarea
+            messageInput.addEventListener('input', function() {
+                this.style.height = 'auto';
+                this.style.height = (this.scrollHeight) + 'px';
+            });
+
+            // drag & drop
+            const inputWrapper = document.getElementById('inputWrapper');
+            inputWrapper.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                inputWrapper.classList.add('drag-over');
+            });
+            inputWrapper.addEventListener('dragleave', () => inputWrapper.classList.remove('drag-over'));
+            inputWrapper.addEventListener('drop', (e) => {
+                e.preventDefault();
+                inputWrapper.classList.remove('drag-over');
+                if (e.dataTransfer.files.length > 0) {
+                    handleFiles(e.dataTransfer.files);
+                }
+            });
+
+            // attach button
+            attachBtn.addEventListener('click', () => {
+                const input = document.createElement('input');
+                input.type = 'file';
+                input.accept = 'image/*, .pdf, .csv, .xlsx, .txt';
+                input.multiple = false;
+                input.onchange = () => {
+                    if (input.files.length) handleFiles(input.files);
+                };
+                input.click();
+            });
+
+            // camera
+            cameraBtn.addEventListener('click', () => {
+                const input = document.createElement('input');
+                input.type = 'file';
+                input.accept = 'image/*';
+                input.capture = 'environment';
+                input.onchange = () => {
+                    if (input.files.length) handleFiles(input.files);
+                };
+                input.click();
+            });
+
+            // mic with waveform (Web Speech API)
+            micBtn.addEventListener('click', () => {
+                if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+                    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                    const recognition = new SpeechRecognition();
+                    recognition.continuous = false;
+                    recognition.interimResults = false;
+                    recognition.lang = 'en-US';
+
+                    voiceWave.style.display = 'flex';
+                    recognition.start();
+
+                    recognition.onresult = (event) => {
+                        const transcript = event.results[0][0].transcript;
+                        messageInput.value = transcript;
+                        messageInput.style.height = 'auto';
+                        messageInput.style.height = messageInput.scrollHeight + 'px';
+                        voiceWave.style.display = 'none';
+                        hapticFlash();
+                    };
+                    recognition.onerror = () => { voiceWave.style.display = 'none'; };
+                    recognition.onend = () => { voiceWave.style.display = 'none'; };
+                } else {
+                    alert('Voice not supported (use Chrome)');
+                }
+            });
+
+            // global translation simulation
+            translateBtn.addEventListener('click', () => {
+                addMessage('user', `<p>🌐 Translate this to French: "Hello, where is the nearest quantum hub?"</p><div class="msg-time">translation request</div>`);
+                setTimeout(() => {
+                    addMessage('ai', `<p><strong>🇫🇷 French:</strong> "Bonjour, où se trouve le hub quantique le plus proche ?"</p><p><strong>🇪🇸 Spanish:</strong> "Hola, ¿dónde está el centro cuántico más cercano?"</p><div class="msg-time">95+ languages online</div>`);
+                }, 700);
+            });
+
+            // restore chat from localStorage
+            restoreMessages();
+
+            // extra: periodic save on any new message (already inside addMessage)
+        })();
     </script>
 </body>
 </html>
