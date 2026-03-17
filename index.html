@@ -1,163 +1,135 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>GDPE FAST AI</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-<style>
-:root{ --bg:#131314; --card:#1e1f20; --text:#e3e3e3; --icon:#c4c7c5; --grad:linear-gradient(45deg,#4285f4,#9b72cb,#d96570); }
-*{margin:0;padding:0;box-sizing:border-box;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;}
-body{background:var(--bg);color:var(--text);height:100vh;display:flex;flex-direction:column;overflow:hidden;}
-
-/* --- FAST SPLASH --- */
-#splash {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: #000; z-index: 99999;
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-}
-.splash-star { font-size: 70px; color: #8ab4f8; margin-bottom: 15px; animation: flash 0.8s infinite; }
-.splash-text { font-size: 35px; font-weight: bold; background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: 8px; }
-
-@keyframes flash { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.7; transform: scale(1.05); } }
-
-/* MAGIC MODAL */
-#codeModal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.98); z-index:9999; padding:15px; flex-direction:column; }
-#codeArea { width:100%; flex:1; background:#000; color:#0f0; border:1px solid #444; padding:15px; font-family:monospace; border-radius:15px; margin-bottom:15px; outline:none; font-size:14px; resize: none;}
-
-/* UI */
-.header{padding:12px 20px; display:flex; justify-content:space-between; align-items:center;}
-.brand-group { display: flex; align-items: center; gap: 8px; }
-.app-title { font-size: 20px; font-weight: bold; background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-.profile-btn{width:35px;height:35px;background:var(--grad);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold; cursor:pointer; color: white;}
-
-.chat-area{flex:1; overflow-y:auto; padding:20px; display:flex; flex-direction:column; scroll-behavior: smooth;}
-.msg{margin-bottom:15px; padding:12px 18px; border-radius:20px; max-width:85%; font-size:16px; line-height: 1.4;}
-.user{align-self:flex-end; background:#2b2b2b; color:white; border-bottom-right-radius:4px;}
-.ai{align-self:flex-start; background:#1e1f20; border:1px solid #333; border-bottom-left-radius:4px;}
-
-.bottom-container{padding:10px 15px 20px;}
-.input-box{background:var(--card); border:1px solid #444; border-radius:35px; padding:5px 10px 5px 20px; display:flex; align-items:center; max-width:800px; margin:0 auto;}
-.input-box input{background:transparent; border:none; outline:none; color:white; font-size:17px; flex:1; height:45px;}
-.icon-btn{color:var(--icon); font-size:22px; cursor:pointer; width:45px; height:45px; display:flex; align-items:center; justify-content:center;}
-#sendBtn { background: white; color: black; width: 40px; height: 40px; border-radius: 50%; border: none; display:none; align-items: center; justify-content: center; cursor: pointer;}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gemini Clone - Working UI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { background-color: #131314; color: #e3e3e3; font-family: 'Google Sans', sans-serif; overflow: hidden; }
+        .sidebar { transition: width 0.3s; width: 68px; background-color: #1e1f20; }
+        .sidebar.expanded { width: 280px; }
+        .input-container { background-color: #1e1f20; border-radius: 28px; transition: 0.2s; }
+        .input-container:focus-within { background-color: #28292a; }
+        textarea { resize: none; max-height: 200px; }
+        /* Scrollbar styling */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
+    </style>
 </head>
-<body>
+<body class="flex h-screen">
 
-<div id="splash">
-    <div class="splash-star"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
-    <div class="splash-text">GDPE</div>
-</div>
+    <aside id="sidebar" class="sidebar flex flex-col justify-between py-4 px-3 h-full hidden md:flex">
+        <div>
+            <button onclick="toggleSidebar()" class="p-3 hover:bg-gray-700 rounded-full mb-8">
+                <i class="fa-solid fa-bars text-xl"></i>
+            </button>
+            <button class="flex items-center p-3 hover:bg-gray-700 rounded-full text-gray-400 gap-4">
+                <i class="fa-solid fa-plus text-xl"></i>
+                <span class="hidden sidebar-text font-medium">New Chat</span>
+            </button>
+        </div>
+        <div class="flex flex-col gap-2">
+            <div class="flex items-center p-3 hover:bg-gray-700 rounded-full gap-4">
+                <i class="fa-solid fa-circle-question text-xl"></i>
+                <span class="hidden sidebar-text">Help</span>
+            </div>
+            <div class="flex items-center p-3 hover:bg-gray-700 rounded-full gap-4">
+                <i class="fa-solid fa-clock-rotate-left text-xl"></i>
+                <span class="hidden sidebar-text">Activity</span>
+            </div>
+            <div class="flex items-center p-3 hover:bg-gray-700 rounded-full gap-4">
+                <i class="fa-solid fa-gear text-xl"></i>
+                <span class="hidden sidebar-text">Settings</span>
+            </div>
+        </div>
+    </aside>
 
-<div id="codeModal">
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-        <h3 style="color:white;">Magic Creator</h3>
-        <i class="fa-solid fa-microphone" id="magicMic" onclick="voiceToCode()" style="font-size:22px; color:#8ab4f8; cursor:pointer;"></i>
-    </div>
-    <textarea id="codeArea" placeholder="Yahan code paste karein ya mic dabakar bolein..."></textarea>
-    <div style="display:flex; gap:8px;">
-        <button onclick="updateApp()" style="flex:1; padding:12px; background:white; border:none; border-radius:10px; font-weight:bold; cursor:pointer;">ACTIVATE</button>
-        <button onclick="closeMaster()" style="padding:12px; background:#333; color:white; border:none; border-radius:10px;">EXIT</button>
-    </div>
-</div>
+    <div class="flex-grow flex flex-col relative overflow-hidden">
+        
+        <header class="flex justify-between items-center p-4">
+            <div class="flex items-center gap-2">
+                <span class="text-xl font-semibold">Gemini <i class="fa-solid fa-caret-down text-sm text-gray-400"></i></span>
+            </div>
+            <div class="flex items-center gap-4">
+                <button class="bg-[#28292a] px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-700">Try Gemini Advanced</button>
+                <img src="https://via.placeholder.com/32" class="w-8 h-8 rounded-full border border-gray-600" alt="Profile">
+            </div>
+        </header>
 
-<div class="header">
-    <i class="fa-solid fa-bars icon-btn" onclick="openMaster()"></i>
-    <div class="brand-group">
-        <i class="fa-solid fa-sparkles" style="color:#8ab4f8;"></i>
-        <div class="app-title">GDPE</div>
-    </div>
-    <div class="profile-btn" onclick="openMaster()">GD</div>
-</div>
+        <div id="chat-window" class="flex-grow overflow-y-auto px-4 md:px-20 py-10 flex flex-col gap-8">
+            <div id="greeting" class="mt-10">
+                <h2 class="text-4xl font-medium text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-red-400 to-orange-400">Hi Gurshak</h2>
+                <h1 class="text-5xl font-semibold text-gray-500 mt-2">Where should we start?</h1>
+            </div>
+        </div>
 
-<div class="chat-area" id="chat">
-    <div class="msg ai">Bhai, ab <b>GDPE</b> super fast hai! Magic Box check karein.</div>
-</div>
-
-<div class="bottom-container">
-    <div class="input-box">
-        <input type="text" id="userInput" placeholder="Ask GDPE..." oninput="checkButtons()" onkeypress="handleEnter(event)">
-        <div style="display:flex;">
-            <div class="icon-btn" id="micBtn" onclick="startVoice()"><i class="fa-solid fa-microphone"></i></div>
-            <button id="sendBtn" onclick="sendMsg()"><i class="fa-solid fa-paper-plane"></i></button>
+        <div class="p-4 md:px-20 pb-8">
+            <div class="input-container p-3 flex flex-col">
+                <textarea id="userInput" rows="1" placeholder="Enter a prompt here" 
+                    class="bg-transparent border-none outline-none w-full px-2 text-lg"
+                    oninput="autoGrow(this)"></textarea>
+                
+                <div class="flex justify-between items-center mt-3 px-2">
+                    <div class="flex gap-4 text-gray-400 items-center">
+                        <label class="cursor-pointer hover:text-white"><i class="fa-solid fa-plus-circle text-xl"></i><input type="file" hidden></label>
+                        <i class="fa-regular fa-image text-xl cursor-pointer hover:text-white"></i>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <div class="bg-[#333537] px-2 py-0.5 rounded-md text-[10px] font-bold text-gray-300">Fast</div>
+                        <i class="fa-solid fa-microphone text-xl text-gray-400 cursor-pointer hover:text-white"></i>
+                        <button id="sendBtn" onclick="sendMessage()" class="hidden"><i class="fa-solid fa-paper-plane text-xl text-blue-400"></i></button>
+                    </div>
+                </div>
+            </div>
+            <p class="text-center text-[11px] text-gray-500 mt-3">Gemini may display inaccurate info, including about people, so double-check its responses.</p>
         </div>
     </div>
-</div>
 
-<script>
-// Splash Control
-window.onload = () => {
-    setTimeout(() => { document.getElementById('splash').style.display = 'none'; }, 1500);
-};
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const texts = document.querySelectorAll('.sidebar-text');
+            sidebar.classList.toggle('expanded');
+            texts.forEach(t => t.classList.toggle('hidden'));
+        }
 
-const chat=document.getElementById('chat'), 
-      userInput=document.getElementById('userInput'), 
-      sendBtn=document.getElementById('sendBtn'), 
-      micBtn=document.getElementById('micBtn'), 
-      codeArea=document.getElementById('codeArea');
+        function autoGrow(element) {
+            element.style.height = "5px";
+            element.style.height = (element.scrollHeight) + "px";
+            
+            const sendBtn = document.getElementById('sendBtn');
+            if(element.value.trim().length > 0) {
+                sendBtn.classList.remove('hidden');
+            } else {
+                sendBtn.classList.add('hidden');
+            }
+        }
 
-const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        function sendMessage() {
+            const input = document.getElementById('userInput');
+            const chatWindow = document.getElementById('chat-window');
+            const greeting = document.getElementById('greeting');
 
-function checkButtons() {
-    let hasText = userInput.value.trim().length > 0;
-    sendBtn.style.display = hasText ? "flex" : "none";
-    micBtn.style.display = hasText ? "none" : "flex";
-}
+            if(input.value.trim() === "") return;
 
-function handleEnter(e) {
-    if(e.key === 'Enter') sendMsg();
-}
+            // Hide greeting on first message
+            if(greeting) greeting.style.display = 'none';
 
-function voiceToCode() {
-    if(!Recognition) return alert("Browser support nahi karta");
-    const rec = new Recognition();
-    rec.lang = 'hi-IN';
-    rec.onresult = (e) => {
-        let t = e.results[0][0].transcript;
-        codeArea.value = `<html><body style="background:#000;color:#fff;display:flex;justify-content:center;align-items:center;height:100vh;font-family:sans-serif;"><h1>${t}</h1></body></html>`;
-    };
-    rec.start();
-}
+            // Append User Message
+            const userMsg = `<div class="flex justify-end"><div class="bg-[#28292a] p-4 rounded-2xl max-w-[80%]">${input.value}</div></div>`;
+            chatWindow.innerHTML += userMsg;
 
-function startVoice() {
-    if(!Recognition) return alert("Browser support nahi karta");
-    const rec = new Recognition();
-    rec.lang = 'hi-IN';
-    rec.onresult = (e) => { 
-        userInput.value = e.results[0][0].transcript; 
-        checkButtons(); 
-        sendMsg(); 
-    };
-    rec.start();
-}
+            // Clear Input
+            input.value = "";
+            input.style.height = "auto";
+            document.getElementById('sendBtn').classList.add('hidden');
 
-function sendMsg() {
-    let t = userInput.value.trim(); 
-    if(!t) return;
-    chat.innerHTML += `<div class="msg user">${t}</div>`;
-    userInput.value = ""; 
-    checkButtons();
-    chat.scrollTop = chat.scrollHeight;
-    
-    // Auto-reply simulation
-    setTimeout(() => {
-        chat.innerHTML += `<div class="msg ai">Sahi hai bhai! Main is par kaam kar raha hoon.</div>`;
-        chat.scrollTop = chat.scrollHeight;
-    }, 1000);
-}
-
-function openMaster() { document.getElementById('codeModal').style.display='flex'; }
-function closeMaster() { document.getElementById('codeModal').style.display='none'; }
-
-function updateApp() {
-    const c = codeArea.value;
-    if(c.trim()) {
-        document.open();
-        document.write(c);
-        document.close();
-    }
-}
-</script>
+            // Scroll to bottom
+            chatWindow.scrollTop = chatWindow.scrollHeight;
+        }
+    </script>
 </body>
 </html>
+
