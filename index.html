@@ -1,798 +1,388 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>NEO-QUANTUM · 2050 AI ASSISTANT</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NEXUS-ULTRA 2050 • Global AI Intelligence</title>
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    /* ChatGPT's Futuristic CSS Integrated & Optimized */
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Inter:wght@300;400;500&family=JetBrains+Mono&display=swap');
 
-        /* 2050 holographic dark theme */
-        :root {
-            --bg-deep: #050505;
-            --glass-edge: rgba(0, 255, 255, 0.25);
-            --glass-panel: rgba(20, 30, 45, 0.5);
-            --primary-glow: #00f0ff;
-            --secondary-glow: #b794f4;
-            --text-primary: rgba(255, 255, 255, 0.95);
-            --text-soft: rgba(200, 230, 255, 0.8);
-            --accent-line: #2affb6;
-            --bubble-user: linear-gradient(145deg, #0066cc, #0099ff);
-            --bubble-ai: rgba(30, 40, 60, 0.7);
-            --success-neon: #00ffaa;
-            --warning-neon: #ffbb33;
-        }
+    :root {
+        --bg-dark: #0a0b10;
+        --bg-purple: #1a0b2e;
+        --glass-bg: rgba(255, 255, 255, 0.05);
+        --glass-border: rgba(255, 255, 255, 0.12);
+        --neon-blue: #00eaff;
+        --neon-purple: #a855ff;
+        --led-green: #00ff9c;
+        --led-red: #ff3b3b;
+        --led-blue: #2f7cff;
+        --accent: #00eaff;
+    }
 
-        body {
-            background: var(--bg-deep);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 1rem;
-            position: relative;
-            overflow-x: hidden;
-        }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
-        /* LIVING NEURAL GRID BACKGROUND (GPU accelerated) */
-        .neural-grid {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-            opacity: 0.3;
-            background-image: 
-                linear-gradient(rgba(0, 255, 255, 0.08) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 255, 255, 0.08) 1px, transparent 1px);
-            background-size: 60px 60px;
-            animation: gridVibrate 8s infinite alternate ease-in-out;
-            transform-origin: center;
-            will-change: transform, opacity;
-            pointer-events: none;
-        }
+    body {
+        font-family: 'Inter', sans-serif;
+        color: white;
+        min-height: 100vh;
+        background: linear-gradient(135deg, var(--bg-dark), var(--bg-purple));
+        background-size: 400% 400%;
+        animation: meshMove 15s ease infinite;
+        display: flex;
+        justify-content: center;
+        padding: 20px;
+        overflow-x: hidden;
+    }
 
-        .neural-grid::before {
-            content: '';
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at 30% 40%, rgba(100, 0, 255, 0.15), transparent 50%),
-                        radial-gradient(circle at 70% 60%, rgba(0, 255, 200, 0.12), transparent 55%);
-            animation: pulseGlow 12s infinite alternate;
-        }
+    @keyframes meshMove { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
 
-        @keyframes gridVibrate {
-            0% { transform: scale(1) rotate(0deg); opacity: 0.25; }
-            50% { transform: scale(1.02) rotate(0.2deg); opacity: 0.35; }
-            100% { transform: scale(0.98) rotate(-0.2deg); opacity: 0.25; }
-        }
+    /* Main Container Structure */
+    .app-container {
+        display: grid;
+        grid-template-columns: 80px 1fr 300px;
+        gap: 20px;
+        max-width: 1400px;
+        width: 100%;
+        margin-top: 20px;
+    }
 
-        @keyframes pulseGlow {
-            0% { opacity: 0.2; }
-            100% { opacity: 0.5; }
-        }
+    /* Glass Panels */
+    .glass {
+        background: var(--glass-bg);
+        backdrop-filter: blur(30px);
+        -webkit-backdrop-filter: blur(30px);
+        border: 1px solid var(--glass-border);
+        border-radius: 22px;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+    }
 
-        /* MAIN CONTAINER – centered, max-width 850px (classic chat efficiency) */
-        .neo-container {
-            position: relative;
-            z-index: 10;
-            width: 100%;
-            max-width: 850px;
-            height: 95vh;
-            background: rgba(8, 12, 20, 0.5);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-edge);
-            border-radius: 42px;
-            box-shadow: 0 0 60px rgba(0, 255, 255, 0.2), inset 0 0 30px rgba(0, 255, 255, 0.05);
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            transition: box-shadow 0.3s ease;
-        }
+    /* Left Sidebar (Apple Style) */
+    .sidebar {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 25px 0;
+        gap: 25px;
+        height: fit-content;
+    }
 
-        /* haptic neon flash */
-        .neo-container.thinking-flash {
-            box-shadow: 0 0 100px #00f0ff, 0 0 200px #b794f4;
-            transition: 0.15s;
-        }
+    .nav-btn {
+        width: 50px;
+        height: 50px;
+        border-radius: 15px;
+        background: transparent;
+        color: rgba(255,255,255,0.5);
+        border: none;
+        cursor: pointer;
+        transition: 0.3s;
+        font-size: 1.2rem;
+    }
 
-        /* HEADER – glass panel */
-        .neo-header {
-            padding: 1.2rem 2rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            border-bottom: 1px solid rgba(0, 255, 255, 0.2);
-            background: rgba(0, 0, 0, 0.25);
-        }
+    .nav-btn:hover, .nav-btn.active {
+        color: var(--neon-blue);
+        background: rgba(255,255,255,0.05);
+        box-shadow: 0 0 15px var(--neon-blue);
+    }
 
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
+    /* Center Workspace */
+    .main-workspace {
+        padding: 25px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
 
-        .quantum-icon {
-            width: 44px;
-            height: 44px;
-            background: linear-gradient(135deg, #00f0ff, #b794f4, #ff5e9e);
-            border-radius: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.8rem;
-            box-shadow: 0 0 25px #00f0ff;
-        }
+    header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
 
-        .brand-text {
-            font-size: clamp(1.4rem, 5vw, 2rem);
-            font-weight: 700;
-            background: linear-gradient(135deg, #fff, #b2f0ff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            letter-spacing: -0.02em;
-        }
+    h1 { font-family: 'Orbitron'; font-size: 1.4rem; color: var(--neon-blue); text-shadow: 0 0 10px rgba(0,234,255,0.3); }
 
-        .user-badge {
-            background: rgba(0, 255, 255, 0.1);
-            padding: 0.6rem 1.2rem;
-            border-radius: 40px;
-            border: 1px solid var(--primary-glow);
-            color: white;
-            font-weight: 500;
-            font-size: 0.95rem;
-            backdrop-filter: blur(10px);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
+    .status-panel {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background: rgba(0,0,0,0.2);
+        padding: 6px 15px;
+        border-radius: 50px;
+        border: 1px solid var(--glass-border);
+    }
 
-        .user-badge::before {
-            content: '';
-            width: 10px;
-            height: 10px;
-            background: #00ffaa;
-            border-radius: 50%;
-            box-shadow: 0 0 15px #00ffaa;
-        }
+    .led-indicator { width: 10px; height: 10px; border-radius: 50%; background: var(--led-blue); transition: 0.3s; }
 
-        /* CHAT AREA */
-        .chat-messages {
-            flex: 1;
-            overflow-y: auto;
-            padding: 2rem 1.5rem;
-            scroll-behavior: smooth;
-            display: flex;
-            flex-direction: column;
-            gap: 1.2rem;
-        }
+    /* Input Hub */
+    .search-box { position: relative; }
+    #searchInput {
+        width: 100%;
+        background: rgba(0,0,0,0.3);
+        border: 1px solid var(--glass-border);
+        padding: 12px 15px 12px 40px;
+        border-radius: 12px;
+        color: white;
+        outline: none;
+        font-size: 0.9rem;
+    }
+    .search-box i { position: absolute; left: 15px; top: 15px; color: var(--neon-blue); opacity: 0.6; }
 
-        /* message bubbles with 3D float effect */
-        .message {
-            display: flex;
-            gap: 12px;
-            max-width: 85%;
-            animation: floatIn 0.35s cubic-bezier(0.2, 0.9, 0.3, 1.1);
-            will-change: transform;
-        }
+    #mainInput {
+        width: 100%;
+        height: 220px;
+        background: rgba(0,0,0,0.3);
+        border: 1px solid var(--glass-border);
+        border-radius: 15px;
+        padding: 20px;
+        color: white;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 14px;
+        resize: none;
+        outline: none;
+        transition: 0.3s;
+    }
+    #mainInput:focus { border-color: var(--neon-blue); box-shadow: 0 0 15px rgba(0,234,255,0.1); }
 
-        .message.user {
-            align-self: flex-end;
-            flex-direction: row-reverse;
-        }
+    /* Action Grid */
+    .action-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; }
 
-        .avatar {
-            width: 42px;
-            height: 42px;
-            border-radius: 14px;
-            background: linear-gradient(145deg, #2a2f4f, #1a1f3a);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-            color: white;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
-            border: 1px solid rgba(255,255,255,0.1);
-            flex-shrink: 0;
-        }
+    .btn {
+        padding: 15px;
+        border-radius: 12px;
+        border: none;
+        cursor: pointer;
+        color: white;
+        background: var(--glass-bg);
+        border: 1px solid var(--glass-border);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        transition: 0.2s;
+    }
 
-        .user .avatar {
-            background: linear-gradient(145deg, #0066cc, #0099ff);
-            border-color: #00f0ff;
-        }
+    .btn:hover {
+        background: linear-gradient(45deg, var(--neon-blue), var(--neon-purple));
+        transform: translateY(-3px);
+        box-shadow: 0 5px 20px rgba(0,234,255,0.3);
+    }
+    .btn:active { transform: scale(0.95); }
 
-        .bubble {
-            padding: 1.2rem 1.5rem;
-            border-radius: 28px;
-            background: var(--bubble-ai);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(0, 255, 255, 0.2);
-            box-shadow: 0 15px 30px -10px rgba(0,0,0,0.5), 0 0 0 1px rgba(0,255,255,0.1) inset;
-            transition: transform 0.2s ease, border-color 0.2s;
-            transform-style: preserve-3d;
-        }
+    /* Memory History */
+    .history-vault { margin-top: 10px; }
+    #historyList { display: flex; flex-direction: column; gap: 10px; max-height: 200px; overflow-y: auto; padding-right: 5px; }
 
-        .message:hover .bubble {
-            border-color: var(--primary-glow);
-            transform: translateY(-3px) scale(1.01);
-            box-shadow: 0 20px 35px -8px #00f0ff40;
-        }
+    .history-card {
+        padding: 12px 18px;
+        background: rgba(255,255,255,0.03);
+        border-radius: 12px;
+        border: 1px solid var(--glass-border);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        cursor: pointer;
+        transition: 0.3s;
+        font-size: 0.85rem;
+    }
+    .history-card:hover { border-color: var(--neon-blue); transform: translateX(5px); background: rgba(0,234,255,0.05); }
 
-        .user .bubble {
-            background: var(--bubble-user);
-            border: 1px solid rgba(255,255,255,0.3);
-            color: white;
-        }
+    /* Insights Side */
+    .insights { padding: 20px; }
+    .insight-item {
+        background: rgba(0,0,0,0.2);
+        padding: 12px;
+        border-radius: 12px;
+        font-size: 0.75rem;
+        margin-bottom: 10px;
+        border-left: 3px solid var(--neon-blue);
+    }
+    #liveClock { text-align: center; margin-top: 20px; font-family: 'Orbitron'; color: var(--neon-blue); font-size: 1rem; }
 
-        .bubble p {
-            margin: 0.5rem 0;
-            line-height: 1.6;
-            font-size: clamp(0.95rem, 2vw, 1.05rem);
-            color: var(--text-primary);
-        }
-
-        /* markdown style inside bubbles */
-        .bubble h1 { font-size: 1.6rem; margin: 0.5rem 0; color: var(--primary-glow); }
-        .bubble h2 { font-size: 1.3rem; color: #b2f0ff; }
-        .bubble strong { color: var(--success-neon); }
-        .bubble ul { margin-left: 1.2rem; }
-
-        /* copy button for code blocks */
-        .code-block {
-            background: #0f172a;
-            border-radius: 16px;
-            padding: 1rem;
-            margin: 0.8rem 0;
-            border: 1px solid #00f0ff30;
-            position: relative;
-        }
-        .copy-btn {
-            position: absolute;
-            top: 8px;
-            right: 8px;
-            background: rgba(0,255,255,0.2);
-            border: none;
-            color: white;
-            padding: 6px 12px;
-            border-radius: 30px;
-            font-size: 0.75rem;
-            cursor: pointer;
-            backdrop-filter: blur(5px);
-            border: 1px solid #00f0ff;
-            transition: 0.15s;
-        }
-        .copy-btn:hover {
-            background: #00f0ff;
-            color: black;
-            box-shadow: 0 0 20px #00f0ff;
-        }
-
-        /* INPUT AREA – chatgpt style expanding + waveform */
-        .input-panel {
-            background: rgba(0, 0, 0, 0.45);
-            backdrop-filter: blur(25px);
-            border-top: 1px solid rgba(0, 255, 255, 0.25);
-            padding: 1.2rem 2rem 1.5rem;
-        }
-
-        .input-wrapper {
-            display: flex;
-            align-items: flex-end;
-            gap: 12px;
-            background: rgba(20, 30, 50, 0.5);
-            border: 1.5px solid rgba(0, 255, 255, 0.3);
-            border-radius: 42px;
-            padding: 0.6rem 0.6rem 0.6rem 1.8rem;
-            transition: border 0.15s, box-shadow 0.15s;
-            position: relative;
-        }
-
-        .input-wrapper:focus-within {
-            border-color: #00f0ff;
-            box-shadow: 0 0 35px #00f0ff;
-        }
-
-        textarea {
-            flex: 1;
-            background: transparent;
-            border: none;
-            color: white;
-            font-size: 1rem;
-            line-height: 1.5;
-            max-height: 150px;
-            resize: none;
-            padding: 0.8rem 0;
-            font-family: inherit;
-            outline: none;
-        }
-
-        textarea::placeholder {
-            color: rgba(200, 220, 255, 0.5);
-            font-weight: 300;
-            letter-spacing: 0.3px;
-        }
-
-        .input-actions {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .action-btn {
-            width: 48px;
-            height: 48px;
-            border-radius: 40px;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(0, 255, 255, 0.4);
-            color: #b2f0ff;
-            font-size: 1.4rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: 0.12s;
-            backdrop-filter: blur(10px);
-        }
-
-        .action-btn:hover {
-            background: #00f0ff;
-            color: #050505;
-            border-color: white;
-            box-shadow: 0 0 35px #00f0ff;
-            transform: scale(1.08);
-        }
-
-        .action-btn:active {
-            transform: scale(0.95);
-            box-shadow: 0 0 60px #ff5e9e;
-        }
-
-        .send-btn {
-            background: linear-gradient(145deg, #00f0ff, #b794f4);
-            color: black;
-            font-weight: bold;
-            border: none;
-            width: 54px;
-            height: 54px;
-        }
-
-        /* Voice waveform (dynamic during mic) */
-        .voice-wave {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            height: 30px;
-            padding: 0 10px;
-        }
-
-        .wave-bar {
-            width: 5px;
-            height: 20px;
-            background: #00f0ff;
-            border-radius: 8px;
-            animation: wave 0.8s infinite ease;
-        }
-
-        .wave-bar:nth-child(2) { animation-delay: 0.1s; height: 28px; background: #b794f4; }
-        .wave-bar:nth-child(3) { animation-delay: 0.2s; height: 24px; }
-        .wave-bar:nth-child(4) { animation-delay: 0.3s; height: 32px; background: #ff5e9e; }
-        .wave-bar:nth-child(5) { animation-delay: 0.4s; height: 18px; }
-
-        @keyframes wave {
-            0%, 100% { transform: scaleY(0.8); opacity: 0.6; }
-            50% { transform: scaleY(1.5); opacity: 1; }
-        }
-
-        /* image preview inside chat */
-        .image-preview {
-            max-width: 240px;
-            border-radius: 24px;
-            border: 2px solid #00f0ff;
-            margin: 10px 0;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-        .image-preview:hover {
-            transform: scale(1.02);
-            filter: brightness(1.2);
-        }
-
-        .ocr-text, .analysis-tag {
-            background: #0f2335;
-            border-radius: 14px;
-            padding: 0.6rem 1rem;
-            margin: 0.5rem 0;
-            border-left: 4px solid #00f0ff;
-            font-size: 0.9rem;
-            color: #b2f0ff;
-        }
-
-        /* file attachment chip */
-        .file-chip {
-            background: #142c3c;
-            border-radius: 40px;
-            padding: 0.5rem 1.2rem;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            border: 1px solid #00f0ff;
-            margin: 0.2rem 0;
-        }
-
-        /* chart placeholder */
-        .chart-box {
-            background: #071a28;
-            border-radius: 24px;
-            padding: 1rem;
-            margin: 0.8rem 0;
-            border: 1px solid cyan;
-            height: 150px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #00f0ff;
-            font-size: 0.9rem;
-            background: linear-gradient(45deg, #0b2540, #001a2f);
-        }
-
-        /* drag-drop highlight */
-        .input-wrapper.drag-over {
-            border-color: #ff5e9e;
-            background: rgba(255, 0, 100, 0.1);
-        }
-
-        /* mobile */
-        @media (max-width: 600px) {
-            .neo-container { height: 98vh; border-radius: 28px; }
-            .message { max-width: 95%; }
-            .input-panel { padding: 1rem; }
-        }
-
-        /* indexedDB persistence message */
-        .restore-toast {
-            background: #0f2a3a;
-            border-left: 5px solid #00f0ff;
-            padding: 12px 20px;
-            border-radius: 40px;
-            color: white;
-            margin-bottom: 12px;
-            font-size: 0.9rem;
-        }
-    </style>
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-thumb { background: var(--glass-border); border-radius: 10px; }
+  </style>
 </head>
 <body>
-    <div class="neural-grid"></div>
 
-    <div class="neo-container" id="neoContainer">
-        <div class="neo-header">
-            <div class="brand">
-                <span class="quantum-icon">⚡</span>
-                <span class="brand-text">NEO·QUANTUM</span>
-            </div>
-            <div class="user-badge">GURSHAK · 2050</div>
+  <div class="app-container">
+    <aside class="sidebar glass">
+      <button class="nav-btn active"><i class="fas fa-brain"></i></button>
+      <button class="nav-btn"><i class="fas fa-cloud"></i></button>
+      <button class="nav-btn"><i class="fas fa-shield-halved"></i></button>
+      <button class="nav-btn" id="lockBtn"><i class="fas fa-unlock"></i></button>
+    </aside>
+
+    <main class="main-workspace glass">
+      <header>
+        <h1>NEXUS-ULTRA <span style="font-size: 0.6rem; vertical-align: middle; background: var(--neon-blue); color: black; padding: 2px 6px; border-radius: 4px;">PRO</span></h1>
+        <div class="status-panel">
+          <div class="led-indicator" id="statusLed"></div>
+          <span id="statusText" style="font-size: 0.7rem; font-weight: 700; letter-spacing: 1px;">SYNCING</span>
         </div>
+      </header>
 
-        <!-- CHAT MESSAGES -->
-        <div class="chat-messages" id="chatMessages">
-            <!-- welcome message from AI (will be restored by DB later) -->
+      <div class="search-box">
+        <i class="fas fa-search"></i>
+        <input type="text" id="searchInput" placeholder="Search neural history logs...">
+      </div>
+
+      <textarea id="mainInput" placeholder="Neural Matrix Active. Input detected..."></textarea>
+
+      <div class="action-grid">
+        <button class="btn" id="copyBtn"><i class="fas fa-bolt"></i> COPY</button>
+        <button class="btn" id="downloadBtn"><i class="fas fa-file-export"></i> EXPORT</button>
+        <button class="btn" id="micBtn"><i class="fas fa-microphone"></i> VOICE</button>
+        <button class="btn" id="clearBtn" style="border-color: rgba(255,59,59,0.3);"><i class="fas fa-radiation"></i> WIPE</button>
+      </div>
+
+      <div class="history-vault">
+        <h3 style="font-size: 0.8rem; margin-bottom: 12px; color: var(--neon-blue);"><i class="fas fa-database"></i> QUANTUM MEMORY</h3>
+        <div id="historyList"></div>
+        <div id="emptyMsg" style="text-align: center; font-size: 0.7rem; color: #555; margin-top: 10px;">Memory Empty</div>
+      </div>
+    </main>
+
+    <aside class="insights glass">
+      <h3 style="font-size: 0.8rem; font-family: 'Orbitron'; margin-bottom: 20px;">AI METRICS</h3>
+      <div class="insight-item">Engine: Nexus v4.0</div>
+      <div class="insight-item">Security: AES-512</div>
+      <div class="insight-item">Neural Sync: Active</div>
+      <div class="insight-item" id="tokenCount">Tokens: 0</div>
+      <div id="liveClock">00:00:00</div>
+    </aside>
+  </div>
+
+  <script>
+    const els = {
+      input: document.getElementById('mainInput'),
+      list: document.getElementById('historyList'),
+      led: document.getElementById('statusLed'),
+      status: document.getElementById('statusText'),
+      search: document.getElementById('searchInput'),
+      tokens: document.getElementById('tokenCount')
+    };
+
+    let isLocked = false;
+
+    // Initialize
+    window.onload = () => {
+      const data = JSON.parse(localStorage.getItem('nexus_v2')) || [];
+      renderHistory(data);
+      setInterval(updateClock, 1000);
+      updateClock();
+    };
+
+    // Copy & Save
+    document.getElementById('copyBtn').onclick = async () => {
+      if(isLocked) return alert("System Locked!");
+      const val = els.input.value.trim();
+      if(!val) return setStatus('ERROR', '#ff3b3b');
+
+      await navigator.clipboard.writeText(val);
+      setStatus('COPIED', '#00ff9c');
+      saveMemory(val);
+    };
+
+    function saveMemory(txt) {
+      let memory = JSON.parse(localStorage.getItem('nexus_v2')) || [];
+      memory = [txt, ...memory.filter(i => i !== txt)].slice(0, 10);
+      localStorage.setItem('nexus_v2', JSON.stringify(memory));
+      renderHistory(memory);
+    }
+
+    function renderHistory(items) {
+      els.list.innerHTML = items.map(item => `
+        <div class="history-card" onclick="restore('${item.replace(/'/g, "\\'")}')">
+          <span>${item.substring(0, 35)}...</span>
+          <i class="fas fa-redo-alt redo-icon" style="color:var(--neon-blue); font-size:10px;"></i>
         </div>
+      `).join('');
+      document.getElementById('emptyMsg').style.display = items.length ? 'none' : 'block';
+    }
 
-        <!-- INPUT PANEL with drag & drop, camera, mic, translation -->
-        <div class="input-panel">
-            <div class="input-wrapper" id="inputWrapper">
-                <textarea id="messageInput" placeholder="Message Gurshak (GPT‑4o + Gemini 1.5 Pro) · 95+ langs" rows="1"></textarea>
-                
-                <!-- voice waveform (hidden by default) -->
-                <div class="voice-wave" id="voiceWave" style="display: none;">
-                    <div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div>
-                </div>
+    function restore(txt) {
+      if(isLocked) return;
+      els.input.value = txt;
+      setStatus('RESTORED', '#2f7cff');
+      updateTokens();
+    }
 
-                <div class="input-actions">
-                    <button class="action-btn" id="attachBtn" title="Attach file (PDF, Excel, CSV, Image)">📎</button>
-                    <button class="action-btn" id="cameraBtn" title="Camera">📷</button>
-                    <button class="action-btn" id="micBtn" title="Voice input">🎤</button>
-                    <button class="action-btn" id="translateBtn" title="Global translation">🌐</button>
-                    <button class="action-btn send-btn" id="sendBtn">➤</button>
-                </div>
-            </div>
-            <div style="text-align: right; margin-top: 6px; color: #6ba0ff; font-size: 0.75rem; opacity: 0.6;">⚡ hybrid reasoning: gpt-4o · gemini 1.5 pro</div>
-        </div>
-    </div>
+    // Voice Engine
+    document.getElementById('micBtn').onclick = () => {
+      const Speech = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if(!Speech) return alert("Browser not supported!");
+      const rec = new Speech();
+      rec.onstart = () => setStatus('LISTENING', '#a855ff');
+      rec.onresult = (e) => {
+        els.input.value += " " + e.results[0][0].transcript;
+        updateTokens();
+        setStatus('SYNCING', '#2f7cff');
+      };
+      rec.start();
+    };
 
-    <script>
-        (function() {
-            // ==================== 2050 CORE ====================
-            const USER_NAME = 'Gurshak';
-            const CHAT_KEY = 'neoQuantumChat';
-            const chatMessages = document.getElementById('chatMessages');
-            const messageInput = document.getElementById('messageInput');
-            const sendBtn = document.getElementById('sendBtn');
-            const attachBtn = document.getElementById('attachBtn');
-            const cameraBtn = document.getElementById('cameraBtn');
-            const micBtn = document.getElementById('micBtn');
-            const translateBtn = document.getElementById('translateBtn');
-            const voiceWave = document.getElementById('voiceWave');
-            const container = document.getElementById('neoContainer');
+    // Lock System
+    document.getElementById('lockBtn').onclick = function() {
+      isLocked = !isLocked;
+      els.input.disabled = isLocked;
+      this.innerHTML = isLocked ? '<i class="fas fa-lock"></i>' : '<i class="fas fa-unlock"></i>';
+      this.classList.toggle('active', isLocked);
+      setStatus(isLocked ? 'LOCKED' : 'SYNCING', isLocked ? '#ff3b3b' : '#2f7cff');
+    };
 
-            // haptic flash
-            function hapticFlash() {
-                container.classList.add('thinking-flash');
-                setTimeout(() => container.classList.remove('thinking-flash'), 250);
-            }
+    // Utils
+    document.getElementById('clearBtn').onclick = () => {
+      if(confirm("Wipe all neural data?")) {
+        localStorage.removeItem('nexus_v2');
+        renderHistory([]);
+        els.input.value = '';
+        updateTokens();
+      }
+    };
 
-            // ========== INDEXED DB / LOCALSTORAGE persistence ==========
-            function saveMessages() {
-                const messages = [];
-                document.querySelectorAll('.message').forEach(msg => {
-                    const isUser = msg.classList.contains('user');
-                    const bubble = msg.querySelector('.bubble');
-                    if (!bubble) return;
-                    const html = bubble.innerHTML; // store full markdown
-                    const time = bubble.querySelector('.msg-time')?.innerText || new Date().toLocaleTimeString();
-                    messages.push({ isUser, html, time });
-                });
-                localStorage.setItem(CHAT_KEY, JSON.stringify(messages));
-            }
+    document.getElementById('downloadBtn').onclick = () => {
+      const blob = new Blob([els.input.value], {type:'text/plain'});
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'Nexus_Export.txt';
+      a.click();
+    };
 
-            function restoreMessages() {
-                const saved = localStorage.getItem(CHAT_KEY);
-                if (saved) {
-                    try {
-                        const msgs = JSON.parse(saved);
-                        msgs.forEach(m => addMessage(m.isUser ? 'user' : 'ai', m.html, true));
-                    } catch (e) {}
-                } else {
-                    // first ever welcome
-                    const welcomeMarkdown = `
-                        <h1>🔮 Good to see you, Gurshak</h1>
-                        <p>I'm <strong>NEO‑QUANTUM</strong>, your 2050 hybrid brain. I blend:</p>
-                        <ul>
-                            <li><span style="color:#00f0ff">GPT‑4o</span> for complex reasoning</li>
-                            <li><span style="color:#b794f4">Gemini 1.5 Pro</span> for vision, files & OCR</li>
-                            <li><span style="color:#2affb6">Google Assistant fluidity</span> with voice</li>
-                        </ul>
-                        <p>Try: upload image (bg remove / OCR), PDF, Excel, or ask anything.</p>
-                        <div class="msg-time" style="opacity:0.6">just now</div>
-                    `;
-                    addMessage('ai', welcomeMarkdown);
-                }
-            }
+    function setStatus(msg, col) {
+      els.status.innerText = msg;
+      els.led.style.background = col;
+      els.led.style.boxShadow = `0 0 10px ${col}`;
+      setTimeout(() => {
+        els.status.innerText = 'SYNCING';
+        els.led.style.background = '#2f7cff';
+      }, 2000);
+    }
 
-            // ADD MESSAGE (with markdown / html)
-            function addMessage(sender, contentHtml, isRestore = false) {
-                const msgDiv = document.createElement('div');
-                msgDiv.className = `message ${sender}`;
+    function updateClock() {
+      document.getElementById('liveClock').innerText = new Date().toLocaleTimeString();
+    }
 
-                const avatarDiv = document.createElement('div');
-                avatarDiv.className = 'avatar';
-                avatarDiv.innerText = sender === 'user' ? 'G' : '⚡';
+    function updateTokens() {
+        els.tokens.innerText = `Tokens: ${Math.ceil(els.input.value.length / 4)}`;
+    }
 
-                const bubbleDiv = document.createElement('div');
-                bubbleDiv.className = 'bubble';
-                bubbleDiv.innerHTML = contentHtml;
+    els.input.oninput = updateTokens;
 
-                msgDiv.appendChild(avatarDiv);
-                msgDiv.appendChild(bubbleDiv);
-                chatMessages.appendChild(msgDiv);
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-
-                if (!isRestore) saveMessages();
-            }
-
-            // markdown parser (basic)
-            function parseMarkdown(text) {
-                // very minimal: convert **bold**, \n, and code ```
-                let html = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-                html = html.replace(/```(.*?)```/gs, '<div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 copy</button><pre><code>$1</code></pre></div>');
-                html = html.replace(/\n/g, '<br>');
-                return html;
-            }
-
-            // copy code function (global)
-            window.copyCode = function(btn) {
-                const pre = btn.nextElementSibling;
-                if (pre) {
-                    navigator.clipboard.writeText(pre.innerText);
-                    btn.innerText = '✅ copied';
-                    setTimeout(() => btn.innerText = '📋 copy', 1500);
-                }
-            };
-
-            // ========== AI RESPONSE (simulate hybrid) ==========
-            function generateAIResponse(userText, attachmentInfo = null) {
-                hapticFlash();
-                let reply = '';
-
-                if (attachmentInfo) {
-                    if (attachmentInfo.type.startsWith('image/')) {
-                        reply = `
-                            <h2>🖼️ Image analysis (Gemini 1.5 Pro)</h2>
-                            <img src="${attachmentInfo.data}" class="image-preview" onclick="window.open(this.src)"/>
-                            <div class="analysis-tag"><strong>🔍 objects detected:</strong> person, laptop, coffee cup, neural interface</div>
-                            <div class="ocr-text"><strong>📝 OCR text:</strong> "NEO-QUANTUM prototype • Gurshak • 2055"</div>
-                            <p><button class="copy-btn" style="position:static; margin-right:8px;" onclick="alert('bg removal demo')">✨ BG REMOVE</button> <button class="copy-btn" style="position:static;" onclick="alert('object analysis')">🔎 OBJECT ANALYSIS</button></p>
-                            <div class="msg-time">from gemini vision</div>
-                        `;
-                    } else if (attachmentInfo.type === 'application/pdf' || attachmentInfo.name?.includes('.pdf')) {
-                        reply = `
-                            <h2>📄 PDF summary (GPT-4o + Gemini)</h2>
-                            <p>Document: <strong>${attachmentInfo.name}</strong> (24 pages)</p>
-                            <ul>
-                                <li>🔹 <strong>Key finding:</strong> Quantum entanglement at room temperature</li>
-                                <li>🔹 <strong>Methodology:</strong> neural network optimization</li>
-                                <li>🔹 <strong>Charts:</strong> page 12 shows efficiency increase</li>
-                            </ul>
-                            <div class="chart-box">📊 [ simulated chart: efficiency +34% ]</div>
-                            <div class="msg-time">analysis complete</div>
-                        `;
-                    } else if (attachmentInfo.type.includes('spreadsheet') || attachmentInfo.name?.includes('.csv') || attachmentInfo.name?.includes('.xlsx')) {
-                        reply = `
-                            <h2>📊 Spreadsheet insight (Gemini pro)</h2>
-                            <p>Rows: 128, columns: 6</p>
-                            <div class="chart-box">📈 [ bar chart: sales vs quarter ]</div>
-                            <p><strong>Summary:</strong> Q3 growth 22%, outlier in row 77 (anomaly detected)</p>
-                            <div class="msg-time">gemini data analysis</div>
-                        `;
-                    }
-                } else {
-                    // text only: use hybrid style with elite markdown
-                    if (userText.toLowerCase().includes('hello') || userText.toLowerCase().includes('hi')) {
-                        reply = `<h2>👋 Hey Gurshak</h2><p>I'm fully online. <strong>GPT-4o</strong> and <strong>Gemini 1.5</strong> ready. How can I assist?</p><div class="msg-time">hybrid response</div>`;
-                    } else if (userText.toLowerCase().includes('code') || userText.toLowerCase().includes('python')) {
-                        reply = `<h2>🐍 Python: fibonacci + memoization</h2><div class="code-block"><button class="copy-btn" onclick="copyCode(this)">📋 copy</button><pre><code>def fib(n, memo={}):
-    if n in memo: return memo[n]
-    if n <= 1: return n
-    memo[n] = fib(n-1, memo) + fib(n-2, memo)
-    return memo[n]
-
-print(fib(100))  # 354224848179261915075</code></pre></div><div class="msg-time">gpt-4o turbo</div>`;
-                    } else {
-                        reply = `<h2>🔮 Gurshak, here's my quantum perspective</h2><p>Your message: "${userText}"</p><p>I processed it with <strong>GPT-4o (reasoning)</strong> and cross-checked via <strong>Gemini 1.5</strong>. The most likely answer involves neural synthesis.</p><div class="msg-time">2050 neural net</div>`;
-                    }
-                }
-
-                addMessage('ai', reply);
-            }
-
-            // ========== SEND MESSAGE ==========
-            function sendUserMessage() {
-                const txt = messageInput.value.trim();
-                if (txt === '') return;
-                addMessage('user', `<p>${txt}</p><div class="msg-time">just now</div>`);
-                messageInput.value = '';
-                messageInput.style.height = 'auto';
-
-                generateAIResponse(txt);
-            }
-
-            // ========== FILE UPLOAD HANDLER (multimodal) ==========
-            function handleFiles(files) {
-                for (let file of files) {
-                    const reader = new FileReader();
-                    reader.onload = (e) => {
-                        let content = '';
-                        if (file.type.startsWith('image/')) {
-                            content = `<div class="file-chip">📷 ${file.name}</div><img src="${e.target.result}" class="image-preview" />`;
-                        } else {
-                            content = `<div class="file-chip">📎 ${file.name} (${(file.size/1024).toFixed(1)} KB)</div>`;
-                        }
-                        addMessage('user', content + `<div class="msg-time">uploaded</div>`);
-
-                        // simulate AI analysis (pass attachment)
-                        generateAIResponse('', { type: file.type, data: e.target.result, name: file.name });
-                    };
-                    if (file.type.startsWith('image/') || file.type.includes('pdf') || file.type.includes('spreadsheet')) {
-                        reader.readAsDataURL(file);
-                    } else {
-                        reader.readAsText(file, 'UTF-8'); // for csv etc
-                    }
-                    break; // only first for demo
-                }
-            }
-
-            // ========== EVENT LISTENERS ==========
-            sendBtn.addEventListener('click', sendUserMessage);
-            messageInput.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter' && !e.shiftKey) {
-                    e.preventDefault();
-                    sendUserMessage();
-                }
-            });
-
-            // auto-expand textarea
-            messageInput.addEventListener('input', function() {
-                this.style.height = 'auto';
-                this.style.height = (this.scrollHeight) + 'px';
-            });
-
-            // drag & drop
-            const inputWrapper = document.getElementById('inputWrapper');
-            inputWrapper.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                inputWrapper.classList.add('drag-over');
-            });
-            inputWrapper.addEventListener('dragleave', () => inputWrapper.classList.remove('drag-over'));
-            inputWrapper.addEventListener('drop', (e) => {
-                e.preventDefault();
-                inputWrapper.classList.remove('drag-over');
-                if (e.dataTransfer.files.length > 0) {
-                    handleFiles(e.dataTransfer.files);
-                }
-            });
-
-            // attach button
-            attachBtn.addEventListener('click', () => {
-                const input = document.createElement('input');
-                input.type = 'file';
-                input.accept = 'image/*, .pdf, .csv, .xlsx, .txt';
-                input.multiple = false;
-                input.onchange = () => {
-                    if (input.files.length) handleFiles(input.files);
-                };
-                input.click();
-            });
-
-            // camera
-            cameraBtn.addEventListener('click', () => {
-                const input = document.createElement('input');
-                input.type = 'file';
-                input.accept = 'image/*';
-                input.capture = 'environment';
-                input.onchange = () => {
-                    if (input.files.length) handleFiles(input.files);
-                };
-                input.click();
-            });
-
-            // mic with waveform (Web Speech API)
-            micBtn.addEventListener('click', () => {
-                if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
-                    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-                    const recognition = new SpeechRecognition();
-                    recognition.continuous = false;
-                    recognition.interimResults = false;
-                    recognition.lang = 'en-US';
-
-                    voiceWave.style.display = 'flex';
-                    recognition.start();
-
-                    recognition.onresult = (event) => {
-                        const transcript = event.results[0][0].transcript;
-                        messageInput.value = transcript;
-                        messageInput.style.height = 'auto';
-                        messageInput.style.height = messageInput.scrollHeight + 'px';
-                        voiceWave.style.display = 'none';
-                        hapticFlash();
-                    };
-                    recognition.onerror = () => { voiceWave.style.display = 'none'; };
-                    recognition.onend = () => { voiceWave.style.display = 'none'; };
-                } else {
-                    alert('Voice not supported (use Chrome)');
-                }
-            });
-
-            // global translation simulation
-            translateBtn.addEventListener('click', () => {
-                addMessage('user', `<p>🌐 Translate this to French: "Hello, where is the nearest quantum hub?"</p><div class="msg-time">translation request</div>`);
-                setTimeout(() => {
-                    addMessage('ai', `<p><strong>🇫🇷 French:</strong> "Bonjour, où se trouve le hub quantique le plus proche ?"</p><p><strong>🇪🇸 Spanish:</strong> "Hola, ¿dónde está el centro cuántico más cercano?"</p><div class="msg-time">95+ languages online</div>`);
-                }, 700);
-            });
-
-            // restore chat from localStorage
-            restoreMessages();
-
-            // extra: periodic save on any new message (already inside addMessage)
-        })();
-    </script>
+    els.search.oninput = (e) => {
+      const term = e.target.value.toLowerCase();
+      document.querySelectorAll('.history-card').forEach(card => {
+        card.style.display = card.innerText.toLowerCase().includes(term) ? 'flex' : 'none';
+      });
+    };
+  </script>
 </body>
 </html>
+
 
