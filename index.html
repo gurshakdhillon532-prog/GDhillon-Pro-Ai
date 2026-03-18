@@ -3,385 +3,525 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NEXUS-ULTRA 2050 • Global AI Intelligence</title>
-  
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  
+  <title>NEXUS‑ULTRA 2050 · compact AI workspace</title>
+  <!-- Fonts: Inter (primary) + JetBrains Mono for textarea, Font Awesome 6 -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600&family=JetBrains+Mono:wght@400..600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
-    /* ChatGPT's Futuristic CSS Integrated & Optimized */
-    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Inter:wght@300;400;500&family=JetBrains+Mono&display=swap');
-
-    :root {
-        --bg-dark: #0a0b10;
-        --bg-purple: #1a0b2e;
-        --glass-bg: rgba(255, 255, 255, 0.05);
-        --glass-border: rgba(255, 255, 255, 0.12);
-        --neon-blue: #00eaff;
-        --neon-purple: #a855ff;
-        --led-green: #00ff9c;
-        --led-red: #ff3b3b;
-        --led-blue: #2f7cff;
-        --accent: #00eaff;
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
-
-    * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
-        font-family: 'Inter', sans-serif;
-        color: white;
-        min-height: 100vh;
-        background: linear-gradient(135deg, var(--bg-dark), var(--bg-purple));
-        background-size: 400% 400%;
-        animation: meshMove 15s ease infinite;
-        display: flex;
-        justify-content: center;
-        padding: 20px;
-        overflow-x: hidden;
+      background: #0c0f1c;
+      background-image: radial-gradient(circle at 90% 10%, rgba(70, 130, 250, 0.1) 0%, transparent 35%),
+                        radial-gradient(circle at 10% 90%, rgba(200, 120, 250, 0.08) 0%, transparent 40%);
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.2rem;
+      color: #eef4ff;
     }
 
-    @keyframes meshMove { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
-
-    /* Main Container Structure */
-    .app-container {
-        display: grid;
-        grid-template-columns: 80px 1fr 300px;
-        gap: 20px;
-        max-width: 1400px;
-        width: 100%;
-        margin-top: 20px;
+    /* COMPACT 3‑COLUMN grid — premium & slim */
+    .nexus-compact {
+      max-width: 1400px;
+      width: 100%;
+      display: grid;
+      grid-template-columns: 60px 1fr 280px;
+      gap: 1rem;
+      align-items: start;
     }
 
-    /* Glass Panels */
-    .glass {
-        background: var(--glass-bg);
-        backdrop-filter: blur(30px);
-        -webkit-backdrop-filter: blur(30px);
-        border: 1px solid var(--glass-border);
-        border-radius: 22px;
-        box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+    /* ---------- LEFT DOCK (60px, floating, glass) ---------- */
+    .left-dock-compact {
+      background: rgba(18, 24, 40, 0.75);
+      backdrop-filter: blur(16px) saturate(180%);
+      -webkit-backdrop-filter: blur(16px);
+      border-radius: 2.5rem;
+      border: 1px solid rgba(90, 150, 255, 0.2);
+      box-shadow: 0 15px 35px -10px #010314, 0 0 0 1px rgba(255,255,255,0.02) inset;
+      padding: 2rem 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2rem;
     }
 
-    /* Left Sidebar (Apple Style) */
-    .sidebar {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        padding: 25px 0;
-        gap: 25px;
-        height: fit-content;
+    .dock-item {
+      width: 40px;
+      height: 40px;
+      border-radius: 1.8rem;
+      background: #141f33;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      color: #9bb3f0;
+      border: 1px solid #314d7a;
+      transition: 0.15s ease;
+      cursor: pointer;
     }
 
-    .nav-btn {
-        width: 50px;
-        height: 50px;
-        border-radius: 15px;
-        background: transparent;
-        color: rgba(255,255,255,0.5);
-        border: none;
-        cursor: pointer;
-        transition: 0.3s;
-        font-size: 1.2rem;
+    .dock-item:hover {
+      background: #23407c;
+      color: white;
+      border-color: #5d8cff;
+      transform: translateY(-2px);
     }
 
-    .nav-btn:hover, .nav-btn.active {
-        color: var(--neon-blue);
-        background: rgba(255,255,255,0.05);
-        box-shadow: 0 0 15px var(--neon-blue);
+    .dock-item.active {
+      background: #2b4c9a;
+      color: white;
+      box-shadow: 0 0 10px #3f7eff;
     }
 
-    /* Center Workspace */
-    .main-workspace {
-        padding: 25px;
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
+    /* ---------- CENTER WORKSPACE (fluid, compact glass) ---------- */
+    .center-workspace {
+      background: rgba(10, 16, 30, 0.6);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-radius: 2.2rem;
+      border: 1px solid rgba(80, 140, 255, 0.2);
+      padding: 1.5rem 1.4rem;
+      box-shadow: 0 20px 35px -12px #030613;
     }
 
-    header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
+    /* Neural header + system telemetry inline */
+    .neural-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.2rem;
     }
 
-    h1 { font-family: 'Orbitron'; font-size: 1.4rem; color: var(--neon-blue); text-shadow: 0 0 10px rgba(0,234,255,0.3); }
-
-    .status-panel {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        background: rgba(0,0,0,0.2);
-        padding: 6px 15px;
-        border-radius: 50px;
-        border: 1px solid var(--glass-border);
+    .brand-mark {
+      font-size: 1.2rem;
+      font-weight: 600;
+      letter-spacing: -0.3px;
+      background: linear-gradient(145deg, #d6e4ff, #ffffff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
 
-    .led-indicator { width: 10px; height: 10px; border-radius: 50%; background: var(--led-blue); transition: 0.3s; }
+    .telemetry-slim {
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+      background: #0f1a30b3;
+      padding: 0.35rem 1.2rem;
+      border-radius: 3rem;
+      border: 1px solid #2f4580;
+    }
 
-    /* Input Hub */
-    .search-box { position: relative; }
+    .led-icon {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #3ac868;
+      box-shadow: 0 0 8px #29c464;
+      transition: background 0.1s;
+    }
+    .led-icon.active { background: #2ce56b; box-shadow: 0 0 14px #14d45a; }
+
+    #liveClock {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      letter-spacing: 0.5px;
+      color: #b2ceff;
+    }
+
+    /* Search discovery bar */
+    .search-discovery {
+      margin-bottom: 1.2rem;
+      position: relative;
+    }
+
     #searchInput {
-        width: 100%;
-        background: rgba(0,0,0,0.3);
-        border: 1px solid var(--glass-border);
-        padding: 12px 15px 12px 40px;
-        border-radius: 12px;
-        color: white;
-        outline: none;
-        font-size: 0.9rem;
+      width: 100%;
+      background: #0f1933;
+      border: 1.5px solid #263863;
+      border-radius: 3.2rem;
+      padding: 0.85rem 1rem 0.85rem 3rem;
+      font-size: 0.9rem;
+      color: white;
+      outline: none;
     }
-    .search-box i { position: absolute; left: 15px; top: 15px; color: var(--neon-blue); opacity: 0.6; }
+
+    #searchInput:focus {
+      border-color: #4b7eff;
+      box-shadow: 0 0 0 3px rgba(75, 126, 255, 0.25);
+    }
+
+    .search-discovery i {
+      position: absolute;
+      left: 1.1rem;
+      top: 0.9rem;
+      color: #7f9fdf;
+      font-size: 1rem;
+    }
+
+    /* Input hub — premium textarea with jetbrains mono */
+    .input-hub {
+      background: #0e1735b3;
+      border-radius: 1.8rem;
+      padding: 1.2rem;
+      border: 1px solid #314d88;
+    }
 
     #mainInput {
-        width: 100%;
-        height: 220px;
-        background: rgba(0,0,0,0.3);
-        border: 1px solid var(--glass-border);
-        border-radius: 15px;
-        padding: 20px;
-        color: white;
-        font-family: 'JetBrains Mono', monospace;
-        font-size: 14px;
-        resize: none;
-        outline: none;
-        transition: 0.3s;
-    }
-    #mainInput:focus { border-color: var(--neon-blue); box-shadow: 0 0 15px rgba(0,234,255,0.1); }
-
-    /* Action Grid */
-    .action-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; }
-
-    .btn {
-        padding: 15px;
-        border-radius: 12px;
-        border: none;
-        cursor: pointer;
-        color: white;
-        background: var(--glass-bg);
-        border: 1px solid var(--glass-border);
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 8px;
-        font-size: 0.8rem;
-        font-weight: 600;
-        transition: 0.2s;
+      width: 100%;
+      background: #0b1025;
+      border: 2px solid #263f72;
+      border-radius: 1.5rem;
+      padding: 1.2rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.9rem;
+      line-height: 1.5;
+      color: #deecff;
+      resize: vertical;
+      min-height: 120px;
     }
 
-    .btn:hover {
-        background: linear-gradient(45deg, var(--neon-blue), var(--neon-purple));
-        transform: translateY(-3px);
-        box-shadow: 0 5px 20px rgba(0,234,255,0.3);
+    #mainInput:focus {
+      border-color: #4d7ef0;
+      outline: none;
     }
-    .btn:active { transform: scale(0.95); }
 
-    /* Memory History */
-    .history-vault { margin-top: 10px; }
-    #historyList { display: flex; flex-direction: column; gap: 10px; max-height: 200px; overflow-y: auto; padding-right: 5px; }
-
-    .history-card {
-        padding: 12px 18px;
-        background: rgba(255,255,255,0.03);
-        border-radius: 12px;
-        border: 1px solid var(--glass-border);
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        cursor: pointer;
-        transition: 0.3s;
-        font-size: 0.85rem;
+    /* Smart toolbar (compact row) */
+    .smart-toolbar {
+      display: flex;
+      gap: 0.6rem;
+      margin-top: 0.8rem;
+      flex-wrap: wrap;
     }
-    .history-card:hover { border-color: var(--neon-blue); transform: translateX(5px); background: rgba(0,234,255,0.05); }
 
-    /* Insights Side */
-    .insights { padding: 20px; }
-    .insight-item {
-        background: rgba(0,0,0,0.2);
-        padding: 12px;
-        border-radius: 12px;
-        font-size: 0.75rem;
-        margin-bottom: 10px;
-        border-left: 3px solid var(--neon-blue);
+    .tool-btn {
+      background: #1d2b4c;
+      border: 1px solid #3e5590;
+      border-radius: 2.5rem;
+      padding: 0.5rem 1.2rem;
+      font-size: 0.8rem;
+      color: #cddeff;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
     }
-    #liveClock { text-align: center; margin-top: 20px; font-family: 'Orbitron'; color: var(--neon-blue); font-size: 1rem; }
 
-    /* Scrollbar */
-    ::-webkit-scrollbar { width: 5px; }
-    ::-webkit-scrollbar-thumb { background: var(--glass-border); border-radius: 10px; }
+    .tool-btn i { color: #7b9eff; font-size: 0.9rem; }
+
+    .tool-btn:hover {
+      background: #29447a;
+      border-color: #5e83ea;
+    }
+
+    /* Master command grid — 4 slim action cards */
+    .command-grid-slim {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.8rem;
+      margin: 1.4rem 0 1.5rem 0;
+    }
+
+    .action-tile {
+      background: #141f41;
+      border-radius: 1.5rem;
+      padding: 0.8rem 0.3rem;
+      text-align: center;
+      border: 1px solid #334f8a;
+      transition: 0.15s;
+      cursor: pointer;
+    }
+
+    .action-tile i {
+      font-size: 1.4rem;
+      color: #7f9fff;
+      margin-bottom: 0.2rem;
+    }
+
+    .action-tile div {
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: -0.2px;
+    }
+
+    .action-tile:hover {
+      background: #1e3170;
+      border-color: #5e86f0;
+      transform: translateY(-2px);
+    }
+
+    /* Quantum memory vault */
+    .memory-vault {
+      background: #0f1838b3;
+      border-radius: 1.6rem;
+      padding: 1rem;
+      border: 1px solid #334f91;
+    }
+
+    .vault-header-slim {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.8rem;
+      font-size: 0.8rem;
+      color: #adc4ff;
+    }
+
+    #historyList {
+      max-height: 180px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+    }
+
+    .history-slim-card {
+      background: #1c294e;
+      border-radius: 1rem;
+      padding: 0.5rem 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border: 1px solid #405eaa;
+      font-size: 0.75rem;
+    }
+
+    .history-slim-card span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 70%; }
+    .history-slim-card i { color: #90acff; opacity: 0.7; font-size: 0.7rem; }
+
+    /* empty state */
+    #emptyHistoryMsg {
+      font-size: 0.75rem;
+      color: #6079b0;
+      padding: 0.7rem;
+      text-align: center;
+    }
+
+    /* ---------- RIGHT ANALYTICS PANEL (280px) compact ---------- */
+    .right-panel-compact {
+      background: rgba(8, 14, 31, 0.7);
+      backdrop-filter: blur(14px);
+      border-radius: 2.2rem;
+      border: 1px solid #314d91;
+      padding: 1.4rem 1rem;
+    }
+
+    .panel-header {
+      display: flex;
+      gap: 0.4rem;
+      border-bottom: 1px solid #2f4690;
+      padding-bottom: 0.8rem;
+      margin-bottom: 1rem;
+      font-size: 0.8rem;
+    }
+
+    .log-compact {
+      display: flex;
+      flex-direction: column;
+      gap: 0.7rem;
+    }
+
+    .metric-row {
+      background: #152145;
+      border-radius: 1rem;
+      padding: 0.6rem 1rem;
+      font-size: 0.75rem;
+      display: flex;
+      justify-content: space-between;
+      border-left: 3px solid #4d84ff;
+    }
   </style>
 </head>
 <body>
+  <!-- 3‑COLUMN COMPACT LAYOUT: left dock (60px) | center workspace | right panel (280px) -->
+  <div class="nexus-compact">
 
-  <div class="app-container">
-    <aside class="sidebar glass">
-      <button class="nav-btn active"><i class="fas fa-brain"></i></button>
-      <button class="nav-btn"><i class="fas fa-cloud"></i></button>
-      <button class="nav-btn"><i class="fas fa-shield-halved"></i></button>
-      <button class="nav-btn" id="lockBtn"><i class="fas fa-unlock"></i></button>
-    </aside>
+    <!-- LEFT DOCK (60px) - slim floating navigation -->
+    <div class="left-dock-compact">
+      <div class="dock-item active" title="Home (Neural Workspace)"><i class="fas fa-house"></i></div>
+      <div class="dock-item" title="Cloud Sync"><i class="fas fa-cloud"></i></div>
+      <div class="dock-item" title="Security Vault"><i class="fas fa-shield"></i></div>
+      <div class="dock-item" title="Settings"><i class="fas fa-sliders"></i></div>
+      <div class="dock-item" title="AI Hub"><i class="fas fa-microchip"></i></div>
+    </div>
 
-    <main class="main-workspace glass">
-      <header>
-        <h1>NEXUS-ULTRA <span style="font-size: 0.6rem; vertical-align: middle; background: var(--neon-blue); color: black; padding: 2px 6px; border-radius: 4px;">PRO</span></h1>
-        <div class="status-panel">
-          <div class="led-indicator" id="statusLed"></div>
-          <span id="statusText" style="font-size: 0.7rem; font-weight: 700; letter-spacing: 1px;">SYNCING</span>
+    <!-- CENTER WORKSPACE (fluid) -->
+    <div class="center-workspace">
+
+      <!-- Neural header with telemetry (led & live clock) -->
+      <div class="neural-header">
+        <div class="brand-mark">NEXUS‑ULTRA 2050</div>
+        <div class="telemetry-slim">
+          <span class="led-icon" id="statusLed"></span>
+          <span id="liveClock">00:00:00</span>
         </div>
-      </header>
+      </div>
 
-      <div class="search-box">
+      <!-- Search discovery bar (id = searchInput) -->
+      <div class="search-discovery">
         <i class="fas fa-search"></i>
-        <input type="text" id="searchInput" placeholder="Search neural history logs...">
+        <input type="text" id="searchInput" placeholder="Search memory vault..." autocomplete="off">
       </div>
 
-      <textarea id="mainInput" placeholder="Neural Matrix Active. Input detected..."></textarea>
-
-      <div class="action-grid">
-        <button class="btn" id="copyBtn"><i class="fas fa-bolt"></i> COPY</button>
-        <button class="btn" id="downloadBtn"><i class="fas fa-file-export"></i> EXPORT</button>
-        <button class="btn" id="micBtn"><i class="fas fa-microphone"></i> VOICE</button>
-        <button class="btn" id="clearBtn" style="border-color: rgba(255,59,59,0.3);"><i class="fas fa-radiation"></i> WIPE</button>
+      <!-- Neural Input Hub with textarea (id = mainInput) + smart toolbar (micBtn, lockBtn, format) -->
+      <div class="input-hub">
+        <textarea id="mainInput" placeholder=" Enter neural command · JetBrains Mono · AI ready"># NEXUS session
+initialize memory vault...</textarea>
+        <!-- Smart toolbar (compact) -->
+        <div class="smart-toolbar">
+          <button class="tool-btn" id="micBtn"><i class="fas fa-microphone"></i> Voice</button>
+          <button class="tool-btn" id="lockBtn"><i class="fas fa-fingerprint"></i> Biometric</button>
+          <button class="tool-btn format-btn"><i class="fas fa-magic"></i> Format</button>
+          <button class="tool-btn"><i class="fas fa-robot"></i> Auto</button>   <!-- extra -->
+        </div>
       </div>
 
-      <div class="history-vault">
-        <h3 style="font-size: 0.8rem; margin-bottom: 12px; color: var(--neon-blue);"><i class="fas fa-database"></i> QUANTUM MEMORY</h3>
-        <div id="historyList"></div>
-        <div id="emptyMsg" style="text-align: center; font-size: 0.7rem; color: #555; margin-top: 10px;">Memory Empty</div>
+      <!-- Master command grid: 4 action cards with exact IDs -->
+      <div class="command-grid-slim">
+        <div class="action-tile" id="copyBtn"><i class="far fa-copy"></i> <div>Nexus Copy</div></div>
+        <div class="action-tile" id="downloadBtn"><i class="fas fa-download"></i> <div>Export Archive</div></div>
+        <div class="action-tile" id="clearBtn"><i class="fas fa-eraser"></i> <div>Wipe Engine</div></div>
+        <div class="action-tile" id="shareBtn"><i class="fas fa-share-alt"></i> <div>Global Share</div></div>
       </div>
-    </main>
 
-    <aside class="insights glass">
-      <h3 style="font-size: 0.8rem; font-family: 'Orbitron'; margin-bottom: 20px;">AI METRICS</h3>
-      <div class="insight-item">Engine: Nexus v4.0</div>
-      <div class="insight-item">Security: AES-512</div>
-      <div class="insight-item">Neural Sync: Active</div>
-      <div class="insight-item" id="tokenCount">Tokens: 0</div>
-      <div id="liveClock">00:00:00</div>
-    </aside>
+      <!-- QUANTUM MEMORY VAULT (history list with slim cards) -->
+      <div class="memory-vault">
+        <div class="vault-header-slim">
+          <span><i class="fas fa-timeline" style="margin-right: 0.3rem;"></i>Quantum memory</span>
+          <span style="color:#a2bcff;">• 3 items</span>
+        </div>
+        <!-- HISTORY CONTAINER (id = historyList) -->
+        <div id="historyList">
+          <div class="history-slim-card">
+            <span><i class="fas fa-code"></i>  const api = 'gpt-6'</span>
+            <i class="fas fa-copy" style="cursor:pointer;"></i>
+          </div>
+          <div class="history-slim-card">
+            <span><i class="fas fa-note"></i>  Q3 latency review</span>
+            <i class="fas fa-copy" style="cursor:pointer;"></i>
+          </div>
+          <div class="history-slim-card">
+            <span><i class="fas fa-key"></i>  sk-23f9a...d3</span>
+            <i class="fas fa-copy" style="cursor:pointer;"></i>
+          </div>
+        </div>
+        <!-- empty state placeholder (hidden by default) -->
+        <div id="emptyHistoryMsg" style="display: none;">✨ no matching memory</div>
+      </div>
+    </div>
+
+    <!-- RIGHT ANALYTICS PANEL (280px) – compact system metrics & logs -->
+    <div class="right-panel-compact">
+      <div class="panel-header">
+        <i class="fas fa-chart-simple" style="color: #5c8aff;"></i> <span>system analytics</span>
+      </div>
+      <div class="log-compact">
+        <div class="metric-row"><span>Neural latency</span> <span>4 ms</span></div>
+        <div class="metric-row"><span>Sync rate</span> <span>98%</span></div>
+        <div class="metric-row"><span>Threat level</span> <span>0.001%</span></div>
+        <div class="metric-row"><span>Vault status</span> <span>🔒 locked</span></div>
+        <div class="metric-row"><span>AI tokens</span> <span>1.2k</span></div>
+        <div class="metric-row"><span>Memory usage</span> <span>342 MB</span></div>
+      </div>
+    </div>
   </div>
 
+  <!-- minimal script: live clock & LED toggle demo + ensures all required IDs are functional 
+       this script does NOT break any external "god-mode" JS — just showcases that IDs are connected. -->
   <script>
-    const els = {
-      input: document.getElementById('mainInput'),
-      list: document.getElementById('historyList'),
-      led: document.getElementById('statusLed'),
-      status: document.getElementById('statusText'),
-      search: document.getElementById('searchInput'),
-      tokens: document.getElementById('tokenCount')
-    };
+    (function() {
+      // IDs exactly as required: mainInput, micBtn, lockBtn, copyBtn, downloadBtn, clearBtn, shareBtn,
+      // historyList, searchInput, statusLed, liveClock, emptyHistoryMsg (optional but present).
 
-    let isLocked = false;
+      const liveClock = document.getElementById('liveClock');
+      const statusLed = document.getElementById('statusLed');
+      const searchInput = document.getElementById('searchInput');
+      const historyContainer = document.getElementById('historyList');
+      const emptyMsg = document.getElementById('emptyHistoryMsg');
 
-    // Initialize
-    window.onload = () => {
-      const data = JSON.parse(localStorage.getItem('nexus_v2')) || [];
-      renderHistory(data);
-      setInterval(updateClock, 1000);
-      updateClock();
-    };
-
-    // Copy & Save
-    document.getElementById('copyBtn').onclick = async () => {
-      if(isLocked) return alert("System Locked!");
-      const val = els.input.value.trim();
-      if(!val) return setStatus('ERROR', '#ff3b3b');
-
-      await navigator.clipboard.writeText(val);
-      setStatus('COPIED', '#00ff9c');
-      saveMemory(val);
-    };
-
-    function saveMemory(txt) {
-      let memory = JSON.parse(localStorage.getItem('nexus_v2')) || [];
-      memory = [txt, ...memory.filter(i => i !== txt)].slice(0, 10);
-      localStorage.setItem('nexus_v2', JSON.stringify(memory));
-      renderHistory(memory);
-    }
-
-    function renderHistory(items) {
-      els.list.innerHTML = items.map(item => `
-        <div class="history-card" onclick="restore('${item.replace(/'/g, "\\'")}')">
-          <span>${item.substring(0, 35)}...</span>
-          <i class="fas fa-redo-alt redo-icon" style="color:var(--neon-blue); font-size:10px;"></i>
-        </div>
-      `).join('');
-      document.getElementById('emptyMsg').style.display = items.length ? 'none' : 'block';
-    }
-
-    function restore(txt) {
-      if(isLocked) return;
-      els.input.value = txt;
-      setStatus('RESTORED', '#2f7cff');
-      updateTokens();
-    }
-
-    // Voice Engine
-    document.getElementById('micBtn').onclick = () => {
-      const Speech = window.SpeechRecognition || window.webkitSpeechRecognition;
-      if(!Speech) return alert("Browser not supported!");
-      const rec = new Speech();
-      rec.onstart = () => setStatus('LISTENING', '#a855ff');
-      rec.onresult = (e) => {
-        els.input.value += " " + e.results[0][0].transcript;
-        updateTokens();
-        setStatus('SYNCING', '#2f7cff');
-      };
-      rec.start();
-    };
-
-    // Lock System
-    document.getElementById('lockBtn').onclick = function() {
-      isLocked = !isLocked;
-      els.input.disabled = isLocked;
-      this.innerHTML = isLocked ? '<i class="fas fa-lock"></i>' : '<i class="fas fa-unlock"></i>';
-      this.classList.toggle('active', isLocked);
-      setStatus(isLocked ? 'LOCKED' : 'SYNCING', isLocked ? '#ff3b3b' : '#2f7cff');
-    };
-
-    // Utils
-    document.getElementById('clearBtn').onclick = () => {
-      if(confirm("Wipe all neural data?")) {
-        localStorage.removeItem('nexus_v2');
-        renderHistory([]);
-        els.input.value = '';
-        updateTokens();
+      // live clock update
+      function tickClock() {
+        if (liveClock) {
+          const now = new Date();
+          const time = now.toLocaleTimeString('en-GB', { hour12: false, hour: '2-digit', minute: '2-digit', second:'2-digit' });
+          liveClock.textContent = time;
+        }
       }
-    };
+      tickClock();
+      setInterval(tickClock, 500);
 
-    document.getElementById('downloadBtn').onclick = () => {
-      const blob = new Blob([els.input.value], {type:'text/plain'});
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = 'Nexus_Export.txt';
-      a.click();
-    };
+      // LED simulation (toggle for demo — will be controlled by external js)
+      statusLed.classList.add('active'); // initially green
+      // you can set idle later if needed: but fine.
 
-    function setStatus(msg, col) {
-      els.status.innerText = msg;
-      els.led.style.background = col;
-      els.led.style.boxShadow = `0 0 10px ${col}`;
-      setTimeout(() => {
-        els.status.innerText = 'SYNCING';
-        els.led.style.background = '#2f7cff';
-      }, 2000);
-    }
+      // simple search filter (history cards)
+      if (searchInput) {
+        searchInput.addEventListener('input', function(e) {
+          const term = e.target.value.toLowerCase();
+          const cards = document.querySelectorAll('#historyList .history-slim-card');
+          let visible = 0;
+          cards.forEach(card => {
+            const text = card.innerText.toLowerCase();
+            if (text.includes(term) || term === '') {
+              card.style.display = 'flex';
+              visible++;
+            } else {
+              card.style.display = 'none';
+            }
+          });
+          if (emptyMsg) {
+            emptyMsg.style.display = visible === 0 ? 'block' : 'none';
+          }
+        });
+      }
 
-    function updateClock() {
-      document.getElementById('liveClock').innerText = new Date().toLocaleTimeString();
-    }
+      // just to demonstrate that micBtn, lockBtn exist and can trigger actions
+      document.getElementById('micBtn')?.addEventListener('click', () => alert('🎤 voice typing engaged (demo)'));
+      document.getElementById('lockBtn')?.addEventListener('click', () => alert('🔒 biometric lock (simulated)'));
 
-    function updateTokens() {
-        els.tokens.innerText = `Tokens: ${Math.ceil(els.input.value.length / 4)}`;
-    }
-
-    els.input.oninput = updateTokens;
-
-    els.search.oninput = (e) => {
-      const term = e.target.value.toLowerCase();
-      document.querySelectorAll('.history-card').forEach(card => {
-        card.style.display = card.innerText.toLowerCase().includes(term) ? 'flex' : 'none';
+      // dummy handlers for action cards (they will be overridden by main js, but present)
+      const copyB = document.getElementById('copyBtn');
+      copyB?.addEventListener('click', () => {
+        const input = document.getElementById('mainInput');
+        if (input) navigator.clipboard?.writeText(input.value);
+        statusLed.style.background = '#2ce56b';
+        statusLed.style.boxShadow = '0 0 14px #14d45a';
+        setTimeout(() => {
+          statusLed.style.background = '#3ac868';
+          statusLed.style.boxShadow = '0 0 8px #29c464';
+        }, 800);
       });
-    };
+
+      document.getElementById('clearBtn')?.addEventListener('click', () => {
+        document.getElementById('mainInput').value = '';
+      });
+
+      // Download & share just for completeness
+      document.getElementById('downloadBtn')?.addEventListener('click', () => {
+        const content = document.getElementById('mainInput').value;
+        const blob = new Blob([content], {type: 'text/plain'});
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'nexus_archive.txt';
+        a.click();
+      });
+
+      document.getElementById('shareBtn')?.addEventListener('click', () => {
+        alert('🌐 global share (demo)');
+      });
+
+    })();
   </script>
+
+  <!-- All required IDs are present:
+    mainInput, micBtn, lockBtn, copyBtn, downloadBtn, clearBtn, shareBtn, historyList, searchInput, statusLed, liveClock, emptyHistoryMsg (optional) 
+    plus .format-btn class for auto-format.
+  -->
 </body>
 </html>
 
