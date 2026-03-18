@@ -1,164 +1,129 @@
 /**
- * NEXUS-ULTRA 2050 - GLOBAL INTELLIGENCE ENGINE
- * Developed by Gemini for Gurshak
- * Features: AI Memory, Voice-to-Text, Security Lock, & Neural Sync
+ * NEXUS-ULTRA 2050 - ULTIMATE NEURAL ENGINE
+ * Fully Synced with your Uploaded Design
  */
 
+const state = {
+    isLocked: false,
+    memory: JSON.parse(localStorage.getItem('nexus_vault')) || []
+};
+
+// --- DOM ELEMENTS MAPPING ---
 const els = {
-    input: document.getElementById('mainInput'),
-    list: document.getElementById('historyList'),
-    led: document.getElementById('statusLed'),
-    status: document.getElementById('statusText'),
-    search: document.getElementById('searchInput'),
-    tokens: document.getElementById('tokenCount'),
-    lockBtn: document.getElementById('lockBtn')
+    input: document.querySelector('textarea') || document.getElementById('mainInput'),
+    historyList: document.getElementById('historyList') || document.querySelector('.history-container'),
+    statusLed: document.getElementById('statusLed') || document.querySelector('.led-small'),
+    statusText: document.getElementById('statusText') || document.querySelector('.metric-item span'),
+    search: document.getElementById('searchInput') || document.querySelector('input[type="text"]'),
+    clock: document.querySelector('.sys-metrics div') || document.getElementById('liveClock')
 };
 
-let isLocked = false;
-
-// --- 1. INITIALIZATION ---
+// --- 1. INITIALIZE ---
 window.onload = () => {
-    // LocalStorage se purani yaadein (Memory) nikalna
-    const memory = JSON.parse(localStorage.getItem('nexus_v2')) || [];
-    renderHistory(memory);
-    
-    // Live Clock Start
-    setInterval(updateClock, 1000);
     updateClock();
-    
-    console.log("Nexus Engine: Online & Synced. 🚀");
+    setInterval(updateClock, 1000);
+    renderHistory();
+    updateLED('sync');
+    console.log("Nexus Engine Online. 🚀");
 };
 
-// --- 2. SMART COPY & SAVE ---
-document.getElementById('copyBtn').onclick = async () => {
-    if (isLocked) return triggerStatus('LOCKED', '#ff3b3b');
-    
+// --- 2. CORE ACTIONS ---
+
+// SMART COPY
+document.getElementById('copyBtn')?.addEventListener('click', async () => {
     const val = els.input.value.trim();
-    if (!val) return triggerStatus('EMPTY', '#ff3b3b');
+    if (!val) return triggerStatus('EMPTY', 'red');
 
-    try {
-        await navigator.clipboard.writeText(val);
-        triggerStatus('COPIED', '#00ff9c'); // Green LED
-        saveToVault(val);
-    } catch (err) {
-        triggerStatus('ERROR', '#ff3b3b');
+    await navigator.clipboard.writeText(val);
+    triggerStatus('COPIED', '#00ff9c');
+    addToMemory(val);
+});
+
+// EXPORT ARCHIVE (.TXT)
+document.getElementById('downloadBtn')?.addEventListener('click', () => {
+    const val = els.input.value;
+    if (!val) return;
+    const blob = new Blob([val], { type: 'text/plain' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `Nexus_Log_${Date.now()}.txt`;
+    a.click();
+    triggerStatus('SAVED', '#3f7eff');
+});
+
+// WIPE ENGINE (Clear)
+document.getElementById('clearBtn')?.addEventListener('click', () => {
+    if (confirm("Purge Neural Memory?")) {
+        els.input.value = '';
+        state.memory = [];
+        localStorage.removeItem('nexus_vault');
+        renderHistory();
+        triggerStatus('PURGED', 'orange');
     }
-};
+});
 
-// --- 3. DATA VAULT (Memory Management) ---
-function saveToVault(txt) {
-    let memory = JSON.parse(localStorage.getItem('nexus_v2')) || [];
-    // Duplicate hatana aur sirf top 10 items rakhna
-    memory = [txt, ...memory.filter(i => i !== txt)].slice(0, 10);
-    localStorage.setItem('nexus_v2', JSON.stringify(memory));
-    renderHistory(memory);
+// VOICE INPUT
+document.getElementById('micBtn')?.addEventListener('click', () => {
+    const Speech = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!Speech) return alert("Browser not supported!");
+    const rec = new Speech();
+    rec.onstart = () => triggerStatus('LISTENING', '#bc13fe');
+    rec.onresult = (e) => {
+        els.input.value += " " + e.results[0][0].transcript;
+        triggerStatus('SYNCED', '#00ff9c');
+    };
+    rec.start();
+});
+
+// --- 3. UTILITIES ---
+
+function addToMemory(txt) {
+    state.memory = [txt, ...state.memory.filter(i => i !== txt)].slice(0, 10);
+    localStorage.setItem('nexus_vault', JSON.stringify(state.memory));
+    renderHistory();
 }
 
-function renderHistory(items) {
-    if (items.length === 0) {
-        document.getElementById('emptyMsg').style.display = 'block';
-        els.list.innerHTML = '';
-        return;
-    }
-    
-    document.getElementById('emptyMsg').style.display = 'none';
-    els.list.innerHTML = items.map(item => `
-        <div class="history-card" onclick="restoreFromVault('${item.replace(/'/g, "\\'")}')">
-          <span>${item.substring(0, 35)}${item.length > 35 ? '...' : ''}</span>
-          <i class="fas fa-redo-alt redo-icon" style="color:#00eaff; font-size:10px;"></i>
+function renderHistory() {
+    const list = document.getElementById('historyList');
+    if (!list) return;
+    list.innerHTML = state.memory.map(item => `
+        <div class="history-card" style="cursor:pointer; margin-bottom:8px;" onclick="restore('${item.replace(/'/g, "\\'")}')">
+          <span style="font-size:12px; opacity:0.8;">${item.substring(0, 30)}...</span>
         </div>
     `).join('');
 }
 
-function restoreFromVault(txt) {
-    if (isLocked) return;
+window.restore = (txt) => {
     els.input.value = txt;
-    updateStats();
-    triggerStatus('RESTORED', '#2f7cff'); // Blue LED
-}
-
-// --- 4. VOICE INTELLIGENCE (Speech to Text) ---
-document.getElementById('micBtn').onclick = () => {
-    if (isLocked) return;
-    const Speech = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (!Speech) return alert("Bhai, aapka browser voice support nahi karta!");
-
-    const recognition = new Speech();
-    recognition.onstart = () => triggerStatus('LISTENING', '#a855ff'); // Purple LED
-    
-    recognition.onresult = (e) => {
-        const transcript = e.results[0][0].transcript;
-        els.input.value += (els.input.value ? " " : "") + transcript;
-        updateStats();
-        triggerStatus('SYNCING', '#2f7cff');
-    };
-    recognition.start();
+    triggerStatus('RESTORED', '#3f7eff');
 };
 
-// --- 5. BIOMETRIC LOCK SYSTEM ---
-els.lockBtn.onclick = function() {
-    isLocked = !isLocked;
-    els.input.disabled = isLocked;
-    
-    // UI Update
-    this.innerHTML = isLocked ? '<i class="fas fa-lock"></i>' : '<i class="fas fa-unlock"></i>';
-    this.style.color = isLocked ? '#ff3b3b' : '#00eaff';
-    
-    triggerStatus(isLocked ? 'LOCKED' : 'UNLOCKED', isLocked ? '#ff3b3b' : '#00ff9c');
-};
-
-// --- 6. UTILITIES (Wipe, Export, Stats) ---
-document.getElementById('clearBtn').onclick = () => {
-    if (confirm("Confirm Permanent Memory Wipe?")) {
-        localStorage.removeItem('nexus_v2');
-        renderHistory([]);
-        els.input.value = '';
-        updateStats();
-        triggerStatus('PURGED', '#ff3b3b');
+function triggerStatus(msg, color) {
+    if (els.statusLed) {
+        els.statusLed.style.background = color;
+        els.statusLed.style.boxShadow = `0 0 10px ${color}`;
     }
-};
-
-document.getElementById('downloadBtn').onclick = () => {
-    const blob = new Blob([els.input.value], { type: 'text/plain' });
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = `Nexus_Export_${Date.now()}.txt`;
-    a.click();
-    triggerStatus('EXPORTED', '#00ff9c');
-};
-
-function triggerStatus(msg, col) {
-    els.status.innerText = msg;
-    els.led.style.background = col;
-    els.led.style.boxShadow = `0 0 15px ${col}`;
-    
-    // 2 second baad wapas normal standby mode
     setTimeout(() => {
-        els.status.innerText = isLocked ? 'LOCKED' : 'SYNCING';
-        els.led.style.background = isLocked ? '#ff3b3b' : '#2f7cff';
-        els.led.style.boxShadow = isLocked ? `0 0 10px #ff3b3b` : 'none';
+        if (els.statusLed) {
+            els.statusLed.style.background = '#3dd68c';
+            els.statusLed.style.boxShadow = 'none';
+        }
     }, 2000);
 }
 
-function updateStats() {
-    const val = els.input.value;
-    if (els.tokens) {
-        els.tokens.innerText = `Tokens: ${Math.ceil(val.length / 4)}`;
+function updateClock() {
+    const clock = document.querySelector('.sys-metrics div') || document.querySelector('header span');
+    if (clock) {
+        const now = new Date();
+        clock.innerText = now.toLocaleTimeString();
     }
 }
 
-function updateClock() {
-    const clock = document.getElementById('liveClock');
-    if (clock) clock.innerText = new Date().toLocaleTimeString();
-}
-
-// Live Search Filter
-els.search.oninput = (e) => {
+// Search Filter
+els.search?.addEventListener('input', (e) => {
     const term = e.target.value.toLowerCase();
     document.querySelectorAll('.history-card').forEach(card => {
         card.style.display = card.innerText.toLowerCase().includes(term) ? 'flex' : 'none';
     });
-};
-
-// Live Input Analytics
-els.input.oninput = updateStats;
+});
+ 
